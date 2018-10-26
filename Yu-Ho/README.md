@@ -1,5 +1,5 @@
 
-# Get Start
+# Get Start
 1. Download/git clone the github folder *Yu-Ho*
 2. Install NodeJs from [NodeJs Official Page](https://nodejs.org/en). 
 3. Open Terminal and *cd* to your file project
@@ -23,7 +23,7 @@
 
 4. The applicatio should look like: 
 
-![Sample](https://imgur.com/a/GuEKE5G)
+![Alt text](https://imgur.com/a/GuEKE5G)
 
 
 # Reference
