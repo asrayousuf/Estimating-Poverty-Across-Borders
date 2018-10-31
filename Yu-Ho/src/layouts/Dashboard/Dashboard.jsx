@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, 
+  Switch, 
+  // Redirect 
+} from "react-router-dom";
 
 import Header from "components/Header/Header";
 import Footer from "components/Footer/Footer";

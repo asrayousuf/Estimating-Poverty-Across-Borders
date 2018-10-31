@@ -7,72 +7,105 @@ import { StatsCard } from "components/StatsCard/StatsCard.jsx";
 import { Tasks } from "components/Tasks/Tasks.jsx";
 import {
   dataPie,
-  legendPie,
-  dataSales,
-  optionsSales,
-  responsiveSales,
-  legendSales,
+  // legendPie,
+  // dataSales,
+  // optionsSales,
+  // responsiveSales,
+  // legendSales,
   dataBar,
   optionsBar,
   responsiveBar,
-  legendBar
+  // legendBar
 } from "variables/Variables.jsx";
 
 import BarChart from '../../d3_components/BarChart';
 
+// Info of different countries
+const countries = ["US","Canada"];
+
+const usStats = {
+  "name" : "US",
+  "population": "100M", 
+  "revenue" : "0.5M/ppl",
+  "twitters": "1M/ppl",
+};
+
+const canadaStats = {
+  "name" : "Cananda",
+  "population": "100M", 
+  "revenue" : "0.5M/ppl",
+  "twitters": "1M/ppl",
+};
+
+// Stats Card Object
+const statsCardPopulation = {
+  "name" : "Population",  
+  "value" : "10M",
+  "icon" : "pe-7s-id text-warning",
+  "statsIcon" : "fa fa-refresh",
+  "statsText" : "3 minutes ago",
+};
+
+const statsCardRevenue = {
+  "name" : "Revenue",  
+  "value" : "10M",
+  "icon" : "pe-7s-cash text-success",
+  "statsIcon" : "fa fa-refresh",
+  "statsText" : "3 minutes ago",
+};
+
+const statsCardHappiness = {
+  "name" : "Happiness",
+  "value" : "5",
+  "icon" : "pe-7s-smile text-danger", 
+  "statsIcon" : "fa fa-refresh",
+  "statsText" : "3 minutes ago",
+};
+
+const statsCardTwitters = {
+  "name" : "Twitters",
+  "value" : "100M",
+  "icon" : "fa fa-twitter text-info",
+  "statsIcon" : "fa fa-refresh",
+  "statsText" : "3 minutes ago",
+};
+
+const statsCardObjs = [
+  statsCardPopulation,
+  statsCardRevenue,
+  statsCardHappiness,
+  statsCardTwitters,
+];
+
 class Dashboard extends Component {
-  createLegend(json) {
-    var legend = [];
-    for (var i = 0; i < json["names"].length; i++) {
-      var type = "fa fa-circle text-" + json["types"][i];
-      legend.push(<i className={type} key={i} />);
-      legend.push(" ");
-      legend.push(json["names"][i]);
-    }
-    return legend;
+    
+  constructor(props) {
+    super(props);
+    this.state = {country: countries[0]};
   }
+    
+
   render() {
+    const statsCards = statsCardObjs.map((obj)=>{
+      return (
+      <Col key={obj.name} lg={3} sm={6}>
+        <StatsCard
+                bigIcon={<i className= {obj.icon} />}
+                statsText= {obj.name}
+                statsValue= {obj.value}
+                statsIcon={<i className={obj.statsIcon} />}
+                statsIconText= {obj.statsText}
+              />
+      </Col>);
+    });
+
     return (
       <div className="content">
         <Grid fluid>
           <Row>
-            <Col lg={3} sm={6}>
-              <StatsCard
-                bigIcon={<i className="pe-7s-server text-warning" />}
-                statsText="Capacity"
-                statsValue="105GB"
-                statsIcon={<i className="fa fa-refresh" />}
-                statsIconText="Updated now"
-              />
-            </Col>
-            <Col lg={3} sm={6}>
-              <StatsCard
-                bigIcon={<i className="pe-7s-wallet text-success" />}
-                statsText="Revenue"
-                statsValue="$1,345"
-                statsIcon={<i className="fa fa-calendar-o" />}
-                statsIconText="Last day"
-              />
-            </Col>
-            <Col lg={3} sm={6}>
-              <StatsCard
-                bigIcon={<i className="pe-7s-graph1 text-danger" />}
-                statsText="Errors"
-                statsValue="23"
-                statsIcon={<i className="fa fa-clock-o" />}
-                statsIconText="In the last hour"
-              />
-            </Col>
-            <Col lg={3} sm={6}>
-              <StatsCard
-                bigIcon={<i className="fa fa-twitter text-info" />}
-                statsText="Followers"
-                statsValue="+45"
-                statsIcon={<i className="fa fa-refresh" />}
-                statsIconText="Updated now"
-              />
-            </Col>
+            {statsCards}
           </Row>
+
           <Row>
             <Col md={8}>
               <div>
@@ -101,9 +134,6 @@ class Dashboard extends Component {
                     />
                   </div>
                 }
-                legend={
-                  <div className="legend">{this.createLegend(legendSales)}</div>
-                }
               /> */}
             </Col>
             <Col md={4}>
@@ -119,9 +149,6 @@ class Dashboard extends Component {
                   >
                     <ChartistGraph data={dataPie} type="Pie" />
                   </div>
-                }
-                legend={
-                  <div className="legend">{this.createLegend(legendPie)}</div>
                 }
               />
             </Col>
@@ -144,9 +171,6 @@ class Dashboard extends Component {
                       responsiveOptions={responsiveBar}
                     />
                   </div>
-                }
-                legend={
-                  <div className="legend">{this.createLegend(legendBar)}</div>
                 }
               />
             </Col>
