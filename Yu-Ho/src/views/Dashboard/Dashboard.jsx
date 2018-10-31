@@ -76,7 +76,14 @@ class Dashboard extends Component {
           <Row>
             <Col md={8}>
               <div>
-                <BarChart data={[5,10,1,3]} size={[200,300]} />
+                <BarChart 
+                  title="BarChart"
+                  category="Map"
+                  stats="Last Update: time"
+                  statsIcon="fa fa-clock-o"
+                  data={[5,10,1,3]} 
+                  size={[200,300]} 
+                  />
               </div>
               {/* <Card
                 statsIcon="fa fa-history"
@@ -104,7 +111,7 @@ class Dashboard extends Component {
                 statsIcon="fa fa-clock-o"
                 title="Email Statistics"
                 category="Last Campaign Performance"
-                stats="Campaign sent 2 days ago"
+                stats="Last Update: time"
                 content={
                   <div
                     id="chartPreferences"
