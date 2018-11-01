@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Wrapper from 'd3_components/Wrapper';
 import { scaleLinear } from "d3-scale";
 import { max } from "d3-array";
 import { select } from "d3-selection";
@@ -14,7 +15,7 @@ class BarChart extends Component {
       this.createBarChart()
    }
    createBarChart() {
-      const node = this.node
+      const node = this.node 
       const dataMax = max(this.props.data)
       const yScale = scaleLinear()
          .domain([0, dataMax])
@@ -42,34 +43,20 @@ class BarChart extends Component {
    }
       render() {
             return( 
-                  <div className={"card" + (this.props.plain ? " card-plain" : "")}>
-                        <div className={"header" + (this.props.hCenter ? " text-center" : "")}>
-                              <h4 className="title">{this.props.title}</h4>
-                              <p className="category">{this.props.category}</p>
-                        </div>
-                        <div
-                        className={
-                        "content" +
-                        (this.props.ctAllIcons ? " all-icons" : "") +
-                        (this.props.ctTableFullWidth ? " table-full-width" : "") +
-                        (this.props.ctTableResponsive ? " table-responsive" : "") +
-                        (this.props.ctTableUpgrade ? " table-upgrade" : "")
-                        }
-                        >
-                              <svg ref={node => this.node = node}
+                  <Wrapper 
+                        title={this.props.title}
+                        category={this.props.category}
+                        hCenter={this.props.hCenter}
+                        ctAllIcons={this.props.ctAllIcons}
+                        ctTableFullWidth={this.props.ctTableFullWidth}
+                        ctTableUpgrade={this.props.ctTableUpgrade}
+                        stats={this.props.stats}
+                        statsIcon={this.props.stats.statsIcon}
+                        size={this.props.size} >
+                        <svg ref={node => this.node = node}
                               width={this.props.size[0]} height={this.props.size[1]}>
-                              </svg>
-
-                              <div className="footer">
-                                    {this.props.legend}
-                                    {this.props.stats != null ? <hr /> : ""}
-                                          <div className="stats">
-                                          <i className={this.props.statsIcon} /> {this.props.stats}
-                                          </div>
-                              </div>
-                        </div>
-                  </div>
-
+                        </svg>      
+                  </Wrapper>
             );
       }
 }
