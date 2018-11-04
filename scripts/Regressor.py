@@ -17,6 +17,7 @@ from sklearn.metrics import mean_absolute_error
 import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.externals import joblib
+from matplotlib import rcParams
 
 class Regressor:
 
@@ -74,13 +75,18 @@ class Regressor:
 		#print(self.model.feature_importances_)
 		if make_chart:
 			print("Generating Chart...")
+			plt.style.use('dark_background')
 			fig, ax = plt.subplots(nrows=1, ncols=1)
-			green, = ax.plot([i for i in range(0, 100, 2)], self.y_test[0:100:2], 'go', label='True')
-			red, = ax.plot([i for i in range(0, 100, 2)], predicted[0:100:2], 'ro', label='Predicted')
-			plt.axis([1, 50, 0, 1])
-			plt.legend(handles=[green, red], labels=["True", "Predicted"])
 			ax.set_ylabel('HDI')
+			ax.set_xlabel("Municipality Codmun ID")
 			ax.set_title(self.name + 'Real vs Predicted')
+			green, = ax.plot(np.arange(20), self.y_test[0:100:5], 'g', label='True')
+			red, = ax.plot(np.arange(20), predicted[0:100:5], 'r', label='Predicted')
+			ax.set_xticks(np.arange(20))
+			x_labels = self.X_test.iloc[0:100:5]['codmun'].tolist()
+			ax.set_xticklabels([str(int(y)) for y in x_labels], rotation='vertical')
+			plt.legend(handles=[green, red], labels=["True", "Predicted"])
+			plt.tight_layout()
 			fig.savefig(self.name + "_real_v_predicted")
 
 		return np.mean(MSEs), mean_absolute_error(self.y_test, self.model.predict(self.X_test)), mean_squared_error(self.y_test, predicted)
@@ -122,7 +128,7 @@ class Regressor:
 		y = df['hdi']
 		X_cols = list(df.columns)
 		X_cols.remove('hdi')
-		X_cols.remove('codmun')
+		#X_cols.remove('codmun')
 		X_cols.remove('hdi_estimated_2016')
 		X_cols.remove('hdi_estimated_2017')
 		X = df[X_cols]
@@ -132,18 +138,17 @@ class Regressor:
 
 
 ######Training Code#########
-"""
+
 cv_error = []
 testing_ma_error = []
 testing_mse = []
 
 mod = RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=2, n_estimators=100)
 r = Regressor("Random Forest")
-cv, ma, mse = r.train(mod, save=True, make_chart=False)
+cv, ma, mse = r.train(mod, save=False, make_chart=True)
 cv_error.append(cv)
 testing_ma_error.append(ma)
 testing_mse.append(mse)
-"""
 ############################
 
 """
