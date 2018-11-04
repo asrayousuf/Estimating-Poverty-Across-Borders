@@ -75,7 +75,7 @@ class Regressor:
 		#print(self.model.feature_importances_)
 		if make_chart:
 			print("Generating Chart...")
-			plt.style.use('dark_background')
+			#plt.style.use('dark_background')
 			fig, ax = plt.subplots(nrows=1, ncols=1)
 			ax.set_ylabel('HDI')
 			ax.set_xlabel("Municipality Codmun ID")
@@ -87,7 +87,10 @@ class Regressor:
 			ax.set_xticklabels([str(int(y)) for y in x_labels], rotation='vertical')
 			plt.legend(handles=[green, red], labels=["True", "Predicted"])
 			plt.tight_layout()
-			fig.savefig(self.name + "_real_v_predicted")
+			fig.savefig(self.name + "_real_v_predicted_white")
+			for x in range(0, 100, 5):
+				print(predicted[x], x_labels[int(x/5)])
+			print(x_labels, predicted[0:100:5])
 
 		return np.mean(MSEs), mean_absolute_error(self.y_test, self.model.predict(self.X_test)), mean_squared_error(self.y_test, predicted)
 
