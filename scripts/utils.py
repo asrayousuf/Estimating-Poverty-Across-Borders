@@ -7,6 +7,10 @@ import pandas as pd
 class DataReader:
 	
 	def __init__(self):
+		"""
+		Constructor for Data Reader, which is used as an abstraction class
+		so that no pandas functions need to be used in the front-end
+		"""
 		self.country_frame = pd.read_csv("../data/country.csv", index_col = None)
 		self.mobility_frame = pd.read_csv("../data/mobility.csv", index_col = None)
 	
@@ -145,8 +149,65 @@ class DataReader:
 		frame = self.mobility_frame
 		return frame[(frame["origin_codmun"] == o_codmun) & (frame["destination_codmun"] == d_codmun)][cols]
 
+	def create_input_data(self):
+		"""
+		Creates input data necessary in a format appropriate for the model.
+		Returns
+		-------
+		Pandas DataFrame: A dataframe of the input data
+		"""
+		frame = self.country_frame
+		mob_frame = self.mobility_frame
+
+		in_frame = mob_frame.groupby(['Country', 'origin_codmun'])[['flow_2016', 'flow_2017']].mean()
+		out_frame = mob_frame.groupby(['Country', 'destination_codmun'])[['flow_2016', 'flow_2017']].mean()
+
+		
+		frame['average_inflow_2016'] = None  
+		frame['average_outflow_2016'] = None
+		frame['average_inflow_2017'] = None  
+		frame['average_outflow_2017'] = None
+
+		inflow_16 = []
+		inflow_17 = []
+		outflow_16 = []
+		outflow_17 = []
+
+		valid_incodes = in_frame.index.levels
+		valid_outcodes = out_frame.index.levels
+
+		for idx in range(len(frame)):
+
+			row = frame.iloc[idx]
+			country = row.loc['Country']
+			codmun = row.loc['codmun']
+
+			try:
+				in_row = in_frame.loc[country, codmun]
+				inflow_16.append(in_row.loc['flow_2016'])
+				inflow_17.append(in_row.loc['flow_2017'])
+			except:
+				inflow_16.append(None)
+				inflow_17.append(None)
+
+			try:
+				out_row = out_frame.loc[country, codmun]
+				outflow_16.append(out_row.loc['flow_2016'])
+				outflow_17.append(out_row.loc['flow_2017'])
+			except:
+				outflow_16.append(None)
+				outflow_17.append(None)
+			
+		frame['average_inflow_2016'] = inflow_16 
+		frame['average_outflow_2016'] = outflow_16
+		frame['average_inflow_2017'] = inflow_17
+		frame['average_outflow_2017'] = outflow_17
+		frame.fillna(0, inplace=True)
+		
+		return frame
 #Example
-d = DataReader()
-print(d.get_cols_mobility(["flow_2016"], 1939, 1939))
+#d = DataReader()
+#print(d.create_input_data())
+#print(d.get_cols_mobility(["flow_2016"], 1939, 1939))
 #print(d.get_cols_country(["hdi"], 1939))
 #print(d.get_hdi(1939))
