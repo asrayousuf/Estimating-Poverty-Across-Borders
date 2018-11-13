@@ -23,6 +23,7 @@ class LeafMap extends Component {
 
       render() {
         const position = [this.state.lat, this.state.lng];
+        const position2 = [this.state.lat + 0.001, this.state.lng + 0.01];
         const leftmap = (
             <div>
             <link rel="stylesheet" type="text/css" href={leafMapCss} />
@@ -34,6 +35,11 @@ class LeafMap extends Component {
                 <Marker  position={position} icon={icon}>
                     <Popup>
                         <p>Hello</p>
+                    </Popup>
+                </Marker>
+                <Marker  position={position2} icon={icon}>
+                    <Popup>
+                        <p>Hello2</p>
                     </Popup>
                 </Marker>
             </Map>
