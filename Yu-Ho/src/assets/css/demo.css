@@ -502,3 +502,9 @@
 .table-upgrade td:nth-child(3){
     text-align: center;
 }
+
+.leaflet-container {
+    height: 400px;
+    width: 80%;
+    margin: 0 auto;
+  }
