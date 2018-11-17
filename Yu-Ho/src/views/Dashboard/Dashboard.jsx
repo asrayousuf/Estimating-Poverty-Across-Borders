@@ -106,10 +106,17 @@ class Dashboard extends Component {
         </Col>);
     });
 
+    const mapData = {        
+      lat: 51.505,
+      lng: -0.09,
+      zoom: 5,
+    };
+
+
     return (
       <div>
         <Tabss handleSelect={this.handleSelect.bind(this)} tabs={countries} />
-        <h2 className="blockquote text-center"> {this.state.selectedCountry} </h2>
+        {/* <h2 className="blockquote text-center"> {this.state.selectedCountry} </h2> */}
         <div className="content">
           <Grid fluid>
             <Row>
@@ -117,10 +124,9 @@ class Dashboard extends Component {
             </Row>
 
             <Row>
-              <Col md={8}>
-                {/* <div> */}
+              <Col md={16}>
                 <div>
-                    <LeafMap/>
+                    <LeafMap data={mapData} />
                 </div>
                   {/* <BarChart
                     title="BarChart"
