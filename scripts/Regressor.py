@@ -15,6 +15,7 @@ from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import cross_val_score, GridSearchCV
 from sklearn.metrics import mean_absolute_error
 import numpy as np
+import pandas as pd
 from matplotlib import pyplot as plt
 from sklearn.externals import joblib
 from matplotlib import rcParams
@@ -125,9 +126,8 @@ class Regressor:
 		X_cols.remove('popularity_2017')
 		X_cols.remove('hdi_estimated_2016')
 		X_cols.remove('hdi_estimated_2017')
-		X = df[X_cols]
-
-		return self.model.predict(input_data)
+		X = input_data[X_cols]
+		return self.model.predict(X)
 
 	def preprocess(self, df):
 		"""
@@ -165,15 +165,30 @@ class Regressor:
 		return X_train.astype('float'), X_test.astype('float'), y_train.astype('float'), y_test.astype('float')
 
 
+
+######Prediction Code#######
+"""
+r = Regressor("Random Forest", load_model=True)
+dataReader = DataReader()
+data = dataReader.create_input_data()
+data.drop_duplicates(inplace=True)
+predicted_hdi = r.predict(data)
+prediction_frame = pd.DataFrame(columns=["codmun", "country", "predicted_hdi"])
+prediction_frame["country"] = data["Country"]
+prediction_frame["codmun"] = data["codmun"]
+prediction_frame["predicted_hdi"] = predicted_hdi
+prediction_frame.to_csv("../data/predictions.csv", index=False)
+"""
+
 ######Training Code#########
 
 #cv_error = []
 #testing_ma_error = []
 #testing_mse = []
 #mod = RandomForestRegressor(bootstrap=True, criterion='mae', n_estimators=100)
-mod = RandomForestRegressor()
-r = Regressor("Random Forest")
-cv, ma, mse = r.train(mod, save=False, make_chart=False)
+#mod = RandomForestRegressor()
+#r = Regressor("Random Forest")
+#cv, ma, mse = r.train(mod, save=False, make_chart=False)
 #cv_error.append(cv)
 #testing_ma_error.append(ma)
 #testing_mse.append(mse)
