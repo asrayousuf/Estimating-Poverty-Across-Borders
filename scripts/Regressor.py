@@ -66,7 +66,7 @@ class Regressor:
 			print(cols[i], importances[i])
 
 		if save:
-			joblib.dump(self.model.best_estimator_, self.name + ".joblib")
+			joblib.dump(self.model.best_estimator_, "../models/" + self.name + ".joblib")
 
 	
 		print("------------------------")
@@ -173,7 +173,7 @@ class Regressor:
 #mod = RandomForestRegressor(bootstrap=True, criterion='mae', n_estimators=100)
 mod = RandomForestRegressor()
 r = Regressor("Random Forest")
-cv, ma, mse = r.train(mod, save=True, make_chart=False)
+cv, ma, mse = r.train(mod, save=False, make_chart=False)
 #cv_error.append(cv)
 #testing_ma_error.append(ma)
 #testing_mse.append(mse)
