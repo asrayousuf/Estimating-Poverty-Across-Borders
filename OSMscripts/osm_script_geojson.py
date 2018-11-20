@@ -12,13 +12,11 @@ from functools import partial
 filename = sys.argv[1]
 outputFile = sys.argv[2]
 final_data = []
-
 with open(filename) as json_file:
     json_data = json.load(json_file)
     lines = json_data['features']
     header = ["codmun", "pharmacy", "hospital", "police", "school", "bank", "embassy", "tower","commercial", "industrial", "government", "supermarket", "park", "primary", "secondary", "unpaved", "paved"]
-    to_write = []
-    to_write.append(header)
+    final_data.append(header)
     URL = 'https://nominatim.openstreetmap.org/reverse'
     SEARCH_URL = 'https://nominatim.openstreetmap.org/search?'
     nodes={
@@ -38,7 +36,6 @@ with open(filename) as json_file:
         coordinates = line['geometry']['coordinates']
         polygon = ""
         points =[]
-
         for lvl1 in coordinates:
             for lvl2 in lvl1:
                
@@ -71,18 +68,12 @@ with open(filename) as json_file:
                     
                         
                 else:
-                    isFloat = False
                     for lvl3 in lvl2:
-                        if(type(lvl3) == list):
-                            coordinate = "{} {}".format(round(float(lvl3[1]), 4), round(float(lvl3[0]), 4))
-                            polygon = polygon + " " + coordinate
-                            points.append((round(float(lvl3[1]), 4), round(float(lvl3[0]), 4)))
-                        else:
-                            isFloat = True
-                    if isFloat:
-                        coordinate = "{} {}".format(round(float(lvl2[1]), 4), round(float(lvl2[0]), 4))
+
+                        coordinate = "{} {}".format(round(float(lvl3[1]), 4), round(float(lvl3[0]), 4))
                         polygon = polygon + " " + coordinate
-                        points.append((round(float(lvl2[1]), 4), round(float(lvl2[0]), 4)))    
+                        points.append((round(float(lvl3[1]), 4), round(float(lvl3[0]), 4)))
+               
 
         polygon = polygon[1:]
         '''
@@ -113,7 +104,7 @@ with open(filename) as json_file:
                 out count;
                 """
                 try:
-                    response = requests.get(overpass_url, params={'data': query}, timeout=30)
+                    response = requests.get(overpass_url, params={'data': query}, timeout=15)
                     cnt = response.json()['elements'][0]['tags']['nodes']
                     #print("{} {} = {}".format(key, val, cnt))
                     data_row.append(cnt)
@@ -121,12 +112,9 @@ with open(filename) as json_file:
                     print("json.decoder.JSONDecodeError Error")
                     data_row.append("null")
                 except TimeoutError:
-                    try:
-                        response = requests.get(overpass_url, params={'data': query}, timeout=50)
-                        cnt = response.json()['elements'][0]['tags']['nodes']
-                        data_row.append(cnt)
-                    except:
-                        data_row.append("null")
+                    response = requests.get(overpass_url, params={'data': query}, timeout=25)
+                    cnt = response.json()['elements'][0]['tags']['nodes']
+                    data_row.append(cnt)
 
 
 
@@ -147,16 +135,13 @@ with open(filename) as json_file:
                 except json.decoder.JSONDecodeError as json_error:
                     print("json.decoder.JSONDecodeError Error")
                     data_row.append("null")
-        to_write.append(data_row)
-        if len(to_write) == 50:
-            with open(outputFile, 'a', newline='\n') as csvfile:
-                writer = csv.writer(csvfile)
-                writer.writerows(to_write)
-            to_write = []
+        final_data.append(data_row)
 
-with open(outputFile, 'a', newline='\n') as csvfile:
+with open(outputFile, 'w', newline='\n') as csvfile:
     writer = csv.writer(csvfile)
-    writer.writerows(to_write)    
+    writer.writerows(final_data)
+
+    
 
 
 

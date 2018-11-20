@@ -3,7 +3,6 @@ Utils.py contains classes/functions that filter/extract data from the excel file
 Created by: Shantanu Mantri
 """
 import pandas as pd
-import numpy as np 
 
 class DataReader:
 	
@@ -12,7 +11,7 @@ class DataReader:
 		Constructor for Data Reader, which is used as an abstraction class
 		so that no pandas functions need to be used in the front-end
 		"""
-		self.country_frame = pd.read_csv("../data/country_new.csv", index_col = None)
+		self.country_frame = pd.read_csv("../data/country.csv", index_col = None)
 		self.mobility_frame = pd.read_csv("../data/mobility.csv", index_col = None)
 	
 	def get_flow(self, country, o_codmun, d_codmun):
@@ -212,45 +211,3 @@ class DataReader:
 #print(d.get_cols_mobility(["flow_2016"], 1939, 1939))
 #print(d.get_cols_country(["hdi"], 1939))
 #print(d.get_hdi(1939))
-#from matplotlib import pyplot as plt
-#plt.style.use('dark_background')
-#frame = pd.read_csv("../data/country.csv", index_col = None)
-#frame = frame[(frame["codmun"] == 91) & (frame["Country"] == "pakistan")][["activity_2016_h0-5","activity_2016_h6-11","activity_2016_h12-17","activity_2016_h18-23"]]
-#x_labels = frame.columns.tolist()
-#fig, ax = plt.subplots(nrows=1, ncols=1)
-#ax.set_ylabel('Tweet Frequency')
-#ax.set_xlabel("Time of day (0 - 23 hours)")
-#ax.set_title("Tweet Activity Frequency in Pakistan Municipality 91")
-#red, = ax.plot(np.arange(4), frame.iloc[0].tolist(), 'r')
-#green = ax.bar(np.arange(4), frame.iloc[0].tolist(), 0.25)
-#ax.set_xticks(np.arange(4))
-#ax.set_xticklabels(["h0-5","h6-11","h12-17","h18-23"], rotation='vertical')
-#plt.tight_layout()
-#fig.savefig("pakistan_twitter")
-
-"""
-###merge geodata###
-cr = pd.read_csv("../data/costarica_geo.csv", index_col = None)
-cr['Country'] = "costarica"
-mexico = pd.read_csv("../data/mexico_geo.csv", index_col = None)
-mexico['Country'] = "mexico"
-nepal = pd.read_csv("../data/nepal_geo.csv", index_col = None)
-nepal['Country'] = "nepal"
-nigeria = pd.read_csv("../data/nigeria_geo.csv", index_col = None)
-nigeria['Country'] = "nigeria"
-pakistan = pd.read_csv("../data/pakistan_geo.csv", index_col = None)
-pakistan['Country'] = "pakistan"
-poland = pd.read_csv("../data/poland_geo.csv", index_col = None)
-poland['Country'] = "poland"
-colombia = pd.read_csv("../data/columbia_geo.csv", index_col = None)
-colombia['Country'] = "colombia"
-brazil = pd.read_csv("../data/brazil_geo.csv", index_col = None)
-brazil['Country'] = "brazil"
-frames = [cr, mexico, nepal, nigeria, pakistan, poland, colombia, brazil]
-geo_frame = pd.concat(frames)
-country_frame = pd.read_csv("../data/country.csv", index_col = None)
-final_frame = pd.merge(country_frame, geo_frame, how='left', left_on=['Country', 'codmun'], right_on=['Country', 'codmun'])
-final_frame.fillna(-1, inplace=True)
-final_frame.to_csv("../data/country_new.csv", index=False)
-#now we join by country and codmun
-"""
