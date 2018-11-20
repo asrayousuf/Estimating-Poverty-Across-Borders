@@ -23,22 +23,61 @@ import {
 
 import BarChart from '../../d3_components/BarChart';
 
-// Info of different countries
-const countries = ["US", "Canada"];
+// Info of different years
+const years = ["2016", "2017"];
 
-const usStats = {
-  "name": "US",
+/*
+ * Info of different countries
+ */ 
+
+const worldStats = {
+  "population": "7.7B",
+  "revenue": "0.5M/ppl",
+  "twitters": "1M/ppl",
+};
+const brazilStats = {
   "population": "100M",
   "revenue": "0.5M/ppl",
   "twitters": "1M/ppl",
 };
 
-const canadaStats = {
-  "name": "Cananda",
+const colombiaStats = {
   "population": "100M",
   "revenue": "0.5M/ppl",
   "twitters": "1M/ppl",
 };
+
+const mexicoStats = {
+  "population": "100M",
+  "revenue": "0.5M/ppl",
+  "twitters": "1M/ppl",
+};
+const nepalStats = {
+  "population": "100M",
+  "revenue": "0.5M/ppl",
+  "twitters": "1M/ppl",
+};
+const pakistanStats = {
+  "population": "100M",
+  "revenue": "0.5M/ppl",
+  "twitters": "1M/ppl",
+};
+const polandStats = {
+  "population": "100M",
+  "revenue": "0.5M/ppl",
+  "twitters": "1M/ppl",
+};
+const nigeriaStats = {
+  "population": "100M",
+  "revenue": "0.5M/ppl",
+  "twitters": "1M/ppl",
+};
+const costaricaStats = {
+  "population": "100M",
+  "revenue": "0.5M/ppl",
+  "twitters": "1M/ppl",
+};
+
 
 // Stats Card Object
 const statsCardPopulation = {
@@ -84,13 +123,21 @@ class Dashboard extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { selectedCountry: "US" };
+    this.state = { 
+      selectedCountry: "US",
+      statsCardObjs: statsCardObjs,
+    };
   }
 
-  handleSelect(key) {
-    this.setState({ selectedCountry: key });
+  handleSelect(country) {
+    this.setState({ selectedCountry: country });
   }
 
+  handleButtonClick(country){
+    statsCardPopulation.name = country;
+    statsCardPopulation.value = 
+    console.log(country);    
+  }
 
   render() {
     const statsCards = statsCardObjs.map((obj) => {
@@ -109,13 +156,13 @@ class Dashboard extends Component {
     const mapData = {        
       lat: 51.505,
       lng: -0.09,
-      zoom: 5,
+      zoom: 2,
     };
 
 
     return (
       <div>
-        <Tabss handleSelect={this.handleSelect.bind(this)} tabs={countries} />
+        <Tabss handleSelect={this.handleSelect.bind(this)} tabs={years} />
         {/* <h2 className="blockquote text-center"> {this.state.selectedCountry} </h2> */}
         <div className="content">
           <Grid fluid>
@@ -126,88 +173,16 @@ class Dashboard extends Component {
             <Row>
               <Col md={16}>
                 <div>
-                    <LeafMap data={mapData} />
+                    <LeafMap data={mapData} handleButtonClick={this.handleButtonClick}/>
                 </div>
-                  {/* <BarChart
+                  <BarChart
                     title="BarChart"
                     category="Map"
                     stats="Last Update: time"
                     statsIcon="fa fa-clock-o"
                     data={[5, 10, 1, 3]}
                     size={[200, 300]}
-                  /> */}
-                {/* </div> */}
-                {/* <Card
-                statsIcon="fa fa-history"
-                id="chartHours"
-                title="Users Behavior"
-                category="24 Hours performance"
-                stats="Updated 3 minutes ago"
-                content={
-                  <div className="ct-chart">
-                    <ChartistGraph
-                      data={dataSales}
-                      type="Line"
-                      options={optionsSales}
-                      responsiveOptions={responsiveSales}
-                    />
-                  </div>
-                }
-              /> */}
-              {/* </Col>
-              <Col md={4}>
-                <Card
-                  statsIcon="fa fa-clock-o"
-                  title="Email Statistics"
-                  category="Last Campaign Performance"
-                  stats="Last Update: time"
-                  content={
-                    <div
-                      id="chartPreferences"
-                      className="ct-chart ct-perfect-fourth"
-                    >
-                      <ChartistGraph data={dataPie} type="Pie" />
-                    </div>
-                  }
-                />
-              </Col>
-            </Row>
-
-            <Row>
-              <Col md={6}>
-                <Card
-                  id="chartActivity"
-                  title="2014 Sales"
-                  category="All products including Taxes"
-                  stats="Data information certified"
-                  statsIcon="fa fa-check"
-                  content={
-                    <div className="ct-chart">
-                      <ChartistGraph
-                        data={dataBar}
-                        type="Bar"
-                        options={optionsBar}
-                        responsiveOptions={responsiveBar}
-                      />
-                    </div>
-                  }
-                />
-              </Col>
-
-              <Col md={6}>
-                <Card
-                  title="Tasks"
-                  category="Backend development"
-                  stats="Updated 3 minutes ago"
-                  statsIcon="fa fa-history"
-                  content={
-                    <div className="table-full-width">
-                      <table className="table">
-                        <Tasks />
-                      </table>
-                    </div>
-                  }
-                />*/}
+                  />
               </Col> 
             </Row>
           </Grid>
