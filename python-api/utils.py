@@ -4,6 +4,7 @@ Created by: Shantanu Mantri
 """
 import pandas as pd
 import numpy as np 
+import csv
 
 class DataReader:
 	
@@ -14,6 +15,7 @@ class DataReader:
 		"""
 		self.country_frame = pd.read_csv("../data/country_new.csv", index_col = None)
 		self.mobility_frame = pd.read_csv("../data/mobility.csv", index_col = None)
+		self.final_data ={}
 	
 	def get_flow(self, country, o_codmun, d_codmun):
 		"""
@@ -206,6 +208,99 @@ class DataReader:
 		frame.fillna(0, inplace=True)
 		
 		return frame
+
+	def parse_country(self):
+		with open('../data/country_hdi.csv') as csv_file:
+			csv_reader = csv.reader(csv_file, delimiter=',')
+			line_count = 0
+			for row in csv_reader:
+				if line_count==0:
+					pass
+				else:
+					if row[3]:
+						country = row[3]
+						country_slug = ''.join(country.split()).lower()
+						self.final_data[country_slug] = {}
+						self.final_data[country_slug]["latitude"] = row[1]
+						self.final_data[country_slug]["longitude"] = row[2]
+						self.final_data[country_slug]["hdi"] = str(0)
+						self.final_data[country_slug]["country_name"] = country
+						self.final_data[country_slug]["cities"] = {}
+						lower_country = row[3].lower()
+						with open('../data/country_hdi.csv') as second_fp:
+							read_csv = csv.reader(second_fp, delimiter=',')
+							for each_row in read_csv:
+								if lower_country ==each_row[4].lower():
+									self.final_data[country_slug]["hdi"] = each_row[5]
+				line_count += 1
+		count = 0
+		for key, val in self.final_data.items():
+			if 'HDI' in val.keys():
+				count+=1
+	
+	def parse_city(self):
+		with open('../data/city.csv') as csv_file:
+			csv_reader = csv.reader(csv_file, delimiter=',')
+			line_count = 0
+			for row in csv_reader:
+				if line_count==0:
+					pass
+				else:
+					if row[4] in self.final_data.keys():
+						country = row[4]
+						codmun =row[0]
+						city_name =row[3]
+						self.final_data[country]['cities'][codmun] = {}
+						self.final_data[country]['cities'][codmun]['latitude'] = row[1]
+						self.final_data[country]['cities'][codmun]['longitude'] = row[2]
+						self.final_data[country]['cities'][codmun]['city_name'] = city_name
+				line_count +=1
+
+	def parse_features(self):
+		with open('../data/country_new.csv') as csv_file:
+			csv_reader = csv.reader(csv_file, delimiter=',')
+			line_count = 0
+			for row in csv_reader:
+				if line_count==0:
+					pass
+				else:
+					country =row[0]
+					codmun = row[1]
+					if country in self.final_data.keys():
+						if self.final_data[country]['cities'] and codmun in self.final_data[country]['cities'].keys():
+							self.final_data[country]['cities'][codmun]['real_hdi'] = row[2]
+							self.final_data[country]['cities'][codmun]['popularity_2016'] = row[7]
+							self.final_data[country]['cities'][codmun]['popularity_2017'] = row[8]
+							self.final_data[country]['cities'][codmun]['activity_2016_h0-5'] = row[9]
+							self.final_data[country]['cities'][codmun]['activity_2016_h6-11'] = row[10]
+							self.final_data[country]['cities'][codmun]['activity_2016_h12-17'] = row[11]
+							self.final_data[country]['cities'][codmun]['activity_2016_h18-23'] = row[12]
+							self.final_data[country]['cities'][codmun]['activity_2017_h0-5'] = row[13]
+							self.final_data[country]['cities'][codmun]['activity_2017_h6-11'] = row[14]
+							self.final_data[country]['cities'][codmun]['activity_2017_h12-17'] = row[15]
+							self.final_data[country]['cities'][codmun]['activity_2017_h18-23'] = row[16]
+							self.final_data[country]['cities'][codmun]['bank'] = row[17]
+							self.final_data[country]['cities'][codmun]['government'] = row[20]
+							self.final_data[country]['cities'][codmun]['pharmacy'] = row[25]
+							self.final_data[country]['cities'][codmun]['secondary'] = row[29]
+				line_count+=1
+	
+	def parse_prediction(self):
+		with open('../data/predictions.csv') as csv_file:
+			csv_reader = csv.reader(csv_file, delimiter=',')
+			line_count = 0
+			for row in csv_reader:
+				if line_count==0:
+					pass
+				else:
+					country =row[1]
+					codmun = row[0]
+					if country in self.final_data.keys():
+						if self.final_data[country]['cities'] and codmun in self.final_data[country]['cities'].keys():
+							self.final_data[country]['cities'][codmun]['predicted_hdi'] = row[2]
+				line_count+=1
+
+
 #Example
 #d = DataReader()
 #print(d.create_input_data())
