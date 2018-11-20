@@ -7,7 +7,7 @@ import Typography from "views/Typography/Typography";
 
 const dashboardRoutes = [
   {
-    path: "/dashboard",
+    path: "/",
     name: "Dashboard",
     icon: "pe-7s-graph",
     component: Dashboard
