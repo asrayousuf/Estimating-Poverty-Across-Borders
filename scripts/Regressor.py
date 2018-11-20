@@ -142,9 +142,22 @@ class Regressor:
 
 ######Training Code#########
 
+<<<<<<< Updated upstream
 cv_error = []
 testing_ma_error = []
 testing_mse = []
+=======
+#cv_error = []
+#testing_ma_error = []
+#testing_mse = []
+#mod = RandomForestRegressor(bootstrap=True, criterion='mae', n_estimators=100)
+mod = RandomForestRegressor()
+r = Regressor("Random Forest")
+cv, ma, mse = r.train(mod, save=False, make_chart=False)
+#cv_error.append(cv)
+#testing_ma_error.append(ma)
+#testing_mse.append(mse)
+>>>>>>> Stashed changes
 
 mod = RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=2, n_estimators=100)
 r = Regressor("Random Forest")
