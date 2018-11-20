@@ -12,9 +12,10 @@ from sklearn.linear_model import Perceptron
 from sklearn import svm
 from sklearn.linear_model import BayesianRidge
 from sklearn.metrics import mean_squared_error
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_score, GridSearchCV
 from sklearn.metrics import mean_absolute_error
 import numpy as np
+import pandas as pd
 from matplotlib import pyplot as plt
 from sklearn.externals import joblib
 from matplotlib import rcParams
@@ -47,18 +48,26 @@ class Regressor:
 		-------
 		float, float, float: The Average CV Mean Squared Error, Mean Absolute Error, and Test MSE 
 		"""
-		self.model = model
 		#get/split data
 		reader = DataReader()
 		df = reader.create_input_data()
 		df = self.preprocess(df)
 		self.X_train, self.X_test, self.y_train, self.y_test = self.split_data(df)
 
+		parameters = {'n_estimators' : [1, 5, 10, 20, 30], 'max_depth' : [1, 5, 10]}
+		rf = RandomForestRegressor()
+		self.model = GridSearchCV(rf, parameters, cv=10)
 		#train model
 		self.model.fit(self.X_train, self.y_train)
 
+		#Feature importance
+		importances = self.model.best_estimator_.feature_importances_
+		cols = self.X_train.columns 
+		for i in range(len(importances)):
+			print(cols[i], importances[i])
+
 		if save:
-			joblib.dump(self.model, self.name + ".joblib")
+			joblib.dump(self.model.best_estimator_, "../models/" + self.name + ".joblib")
 
 	
 		print("------------------------")
@@ -69,7 +78,7 @@ class Regressor:
                          cv=8)
 
 		predicted = self.model.predict(self.X_test)
-		print("Average CV Mean Squared Error: ", np.mean(MSEs))
+		print("Average CV Mean Squared Error: ", abs(np.mean(MSEs)))
 		print("Testing Mean Absolute Error: ", mean_absolute_error(self.y_test, self.model.predict(self.X_test)))
 		print("Testing MSE: ", mean_squared_error(self.y_test, predicted))
 		#print(self.model.feature_importances_)
@@ -88,6 +97,9 @@ class Regressor:
 			plt.legend(handles=[green, red], labels=["True", "Predicted"])
 			plt.tight_layout()
 			fig.savefig(self.name + "_real_v_predicted")
+			for x in range(0, 100, 5):
+				print(predicted[x], x_labels[int(x/5)])
+			print(x_labels, predicted[0:100:5])
 
 		return np.mean(MSEs), mean_absolute_error(self.y_test, self.model.predict(self.X_test)), mean_squared_error(self.y_test, predicted)
 
@@ -103,7 +115,19 @@ class Regressor:
 		-------
 		Numpy Float Array: An array of the resulting HDI Predictions
 		"""
-		return self.model.predict(input_data)
+		#clean input_data appropriately
+		X_cols = list(input_data.columns)
+		X_cols.remove('hdi')
+		X_cols.remove('Country')
+		X_cols.remove('codmun')
+		X_cols.remove('entropy_2016')
+		X_cols.remove('entropy_2017')
+		X_cols.remove('popularity_2016')
+		X_cols.remove('popularity_2017')
+		X_cols.remove('hdi_estimated_2016')
+		X_cols.remove('hdi_estimated_2017')
+		X = input_data[X_cols]
+		return self.model.predict(X)
 
 	def preprocess(self, df):
 		"""
@@ -128,27 +152,47 @@ class Regressor:
 		y = df['hdi']
 		X_cols = list(df.columns)
 		X_cols.remove('hdi')
-		#X_cols.remove('codmun')
+		X_cols.remove('Country')
+		X_cols.remove('codmun')
+		X_cols.remove('entropy_2016')
+		X_cols.remove('entropy_2017')
+		X_cols.remove('popularity_2016')
+		X_cols.remove('popularity_2017')
 		X_cols.remove('hdi_estimated_2016')
 		X_cols.remove('hdi_estimated_2017')
 		X = df[X_cols]
-		print(X.columns)
 		X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=True, random_state=42)
 		return X_train.astype('float'), X_test.astype('float'), y_train.astype('float'), y_test.astype('float')
 
 
+
+######Prediction Code#######
+"""
+r = Regressor("Random Forest", load_model=True)
+dataReader = DataReader()
+data = dataReader.create_input_data()
+data.drop_duplicates(inplace=True)
+predicted_hdi = r.predict(data)
+prediction_frame = pd.DataFrame(columns=["codmun", "country", "predicted_hdi"])
+prediction_frame["country"] = data["Country"]
+prediction_frame["codmun"] = data["codmun"]
+prediction_frame["predicted_hdi"] = predicted_hdi
+prediction_frame.to_csv("../data/predictions.csv", index=False)
+"""
+
 ######Training Code#########
 
-cv_error = []
-testing_ma_error = []
-testing_mse = []
+#cv_error = []
+#testing_ma_error = []
+#testing_mse = []
+#mod = RandomForestRegressor(bootstrap=True, criterion='mae', n_estimators=100)
+#mod = RandomForestRegressor()
+#r = Regressor("Random Forest")
+#cv, ma, mse = r.train(mod, save=False, make_chart=False)
+#cv_error.append(cv)
+#testing_ma_error.append(ma)
+#testing_mse.append(mse)
 
-mod = RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=2, n_estimators=100)
-r = Regressor("Random Forest")
-cv, ma, mse = r.train(mod, save=False, make_chart=True)
-cv_error.append(cv)
-testing_ma_error.append(ma)
-testing_mse.append(mse)
 ############################
 
 """
