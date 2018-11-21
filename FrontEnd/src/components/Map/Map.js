@@ -13,7 +13,7 @@ import {
     TileLayer,
   } from 'react-leaflet';
 import Leaflet  from 'leaflet'
-import {Button,ButtonToolbar} from 'react-bootstrap';
+import {Button,ButtonToolbar,ProgressBar} from 'react-bootstrap';
 
 const { BaseLayer, Overlay } = LayersControl
 const leafMapCss = "//cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css";
@@ -96,6 +96,7 @@ class LeafMap extends Component {
             latlng.push(countriesJson[country]['longitude']);
             const hdi = Number(countriesJson[country]['hdi'])*15;
             const text = "Name: " + country + "<br>" + "HDI: " + hdi; 
+            
             const circle = Leaflet.circleMarker(latlng,{radius:hdi}).bindPopup(text);
             circle.on('mouseover', function (e) {
                 this.openPopup();
@@ -125,7 +126,7 @@ class LeafMap extends Component {
 
     render() {
         if(!this.state.isLoaded){
-            return <div>Loading</div>;
+            <ProgressBar now={100}/>;
         }
 
         // Map basic parameters
