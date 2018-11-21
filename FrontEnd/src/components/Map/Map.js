@@ -53,8 +53,15 @@ class LeafMap extends Component {
             latlng.push(this.props.countriesJson[country]['longitude']);
             const hdi = Number(this.props.countriesJson[country]['hdi'])*15;
             const text = "Name: " + country + "<br>" + "HDI: " + hdi; 
-            
-            const circle = Leaflet.circleMarker(latlng,{radius:hdi}).bindPopup(text);
+            var color = "";
+            if(hdi >= 0.75) {
+                color = "#99FF00";
+            } else if(hdi > 0.5) {
+                color = "#FFFF00";
+            } else {
+                color = "#F00";
+            }
+            const circle = Leaflet.circleMarker(latlng,{radius:hdi, color: color}).bindPopup(text);
             circle.on('mouseover', function (e) {
                 this.openPopup();
             });
@@ -77,15 +84,13 @@ class LeafMap extends Component {
     clickFly(country, latlng, zoom){
         mapRef.flyTo(latlng,zoom);
         mapRef.removeLayer(circleLayerGroup);
+        //Create Red Circles on City Data
 
         this.props.handleButtonClick(country);
 
     } 
 
     render() {
-        if(!this.state.isLoaded){
-            <ProgressBar now={100}/>;
-        }
 
         // Map basic parameters
         const originPosition = [51.505, -0.09];

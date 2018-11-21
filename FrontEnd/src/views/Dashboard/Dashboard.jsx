@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ChartistGraph from "react-chartist";
-import { Grid, Row, Col } from "react-bootstrap";
+import { Grid, Row, Col, ProgressBar } from "react-bootstrap";
 
 import { Card } from "components/Card/Card.jsx";
 import { StatsCard } from "components/StatsCard/StatsCard.jsx";
@@ -192,7 +192,7 @@ class Dashboard extends Component {
     });
 
     if(!this.state.isLoaded){
-      return <div> is loading</div>;
+        <ProgressBar now={100}/>;
     }
 
     return (
