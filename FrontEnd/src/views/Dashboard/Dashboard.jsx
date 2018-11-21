@@ -119,24 +119,62 @@ const statsCardObjs = [
   statsCardTwitters,
 ];
 
+const targetCountries = ["Fly Back", "Brazil","Colombia"];
+
 class Dashboard extends Component {
 
   constructor(props) {
     super(props);
     this.state = { 
-      selectedCountry: "US",
+      isLoaded: false,
+      countriesJson: {},
+      citiesJson: {},
+      countries: [],
       statsCardObjs: statsCardObjs,
     };
   }
 
-  handleSelect(country) {
-    this.setState({ selectedCountry: country });
-  }
+  componentDidMount(){
+
+    // Fetech the countries data
+    var proxyUrl = 'https://cors-anywhere.herokuapp.com/',
+        targetUrl = 'http://rosygupta.pythonanywhere.com';
+    fetch(proxyUrl + targetUrl)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                const countries = [];
+                for(var country in result){
+                    countries.push(country);
+                }
+
+                const countriesJson = result;
+                const citiesJson = targetCountries.map((target)=>{
+                    if(target == "Fly Back")
+                        return;
+                    return countriesJson[target]['cities']
+                });
+        
+                this.setState({
+                    isLoaded: true,
+                    countries,
+                    countriesJson,
+                    citiesJson,
+                });
+            },
+            (error) => {
+                this.setState({
+                    isLoaded: true,
+                    error
+                });
+            }
+        )
+}
+
 
   handleButtonClick(country){
     statsCardPopulation.name = country;
-    statsCardPopulation.value = 
-    console.log(country);    
+    statsCardPopulation.value = null;
   }
 
   render() {
@@ -153,28 +191,20 @@ class Dashboard extends Component {
         </Col>);
     });
 
-    const mapData = {        
-      lat: 51.505,
-      lng: -0.09,
-      zoom: 2,
-    };
-
+    if(!this.state.isLoaded){
+      return <div> is loading</div>;
+    }
 
     return (
       <div>
-        <Tabss handleSelect={this.handleSelect.bind(this)} tabs={years} />
-        {/* <h2 className="blockquote text-center"> {this.state.selectedCountry} </h2> */}
         <div className="content">
           <Grid fluid>
             <Row>
               {statsCards}
             </Row>
-
             <Row>
               <Col md={16}>
                 <div>
-                    <LeafMap data={mapData} handleButtonClick={this.handleButtonClick}/>
-                </div>
                   <BarChart
                     title="BarChart"
                     category="Map"
@@ -182,7 +212,14 @@ class Dashboard extends Component {
                     statsIcon="fa fa-clock-o"
                     data={[5, 10, 1, 3]}
                     size={[200, 300]}
-                  />
+                    />
+                    <LeafMap 
+                      countriesJson={this.state.countriesJson}
+                      citiesJson={this.state.citiesJson}
+                      countries={this.state.countries} 
+                      targetCountries ={targetCountries}
+                      handleButtonClick={this.handleButtonClick}/>
+                </div>
               </Col> 
             </Row>
           </Grid>
