@@ -119,7 +119,7 @@ const statsCardObjs = [
   statsCardTwitters,
 ];
 
-const targetCountries = ["Fly Back", "brazil","colombia"];
+const targetCountries = ["Fly Back", "brazil","colombia", "costarica"];
 
 class Dashboard extends Component {
 
@@ -135,7 +135,6 @@ class Dashboard extends Component {
   }
 
   componentDidMount(){
-
     // Fetech the countries data
     var proxyUrl = 'https://cors-anywhere.herokuapp.com/',
         targetUrl = 'http://c51a1e79.ngrok.io/get_data/';
@@ -147,7 +146,7 @@ class Dashboard extends Component {
                 for(var country in result){
                     countries.push(country);
                 }
-                console.log(result);
+                //console.log(result);
                 const countriesJson = result;
                 const citiesJson = targetCountries.map((target)=>{
                     if(target == "Fly Back")
@@ -192,7 +191,7 @@ class Dashboard extends Component {
     });
 
     if(!this.state.isLoaded){
-        <ProgressBar now={100}/>;
+        return <ProgressBar now={100}/>;
     }
 
     return (

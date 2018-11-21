@@ -51,17 +51,19 @@ class LeafMap extends Component {
             const latlng = [];
             latlng.push(this.props.countriesJson[country]['latitude']);
             latlng.push(this.props.countriesJson[country]['longitude']);
-            const hdi = Number(this.props.countriesJson[country]['hdi'])*15;
+            const hdi = Number(this.props.countriesJson[country]['hdi']);
             const text = "Name: " + country + "<br>" + "HDI: " + hdi; 
             var color = "";
             if(hdi >= 0.75) {
                 color = "#99FF00";
             } else if(hdi > 0.5) {
                 color = "#FFFF00";
+            } else if(hdi == 0) {
+                color = "#000000"
             } else {
                 color = "#F00";
             }
-            const circle = Leaflet.circleMarker(latlng,{radius:hdi, color: color}).bindPopup(text);
+            const circle = Leaflet.circleMarker(latlng,{radius:hdi*15, color: color}).bindPopup(text);
             circle.on('mouseover', function (e) {
                 this.openPopup();
             });
@@ -75,19 +77,92 @@ class LeafMap extends Component {
         circleLayerGroup = Leaflet.layerGroup(circles);
         mapRef.addLayer(circleLayerGroup);
 
-
     }
 
+    makeCircles(country, getCities) {
+        if(getCities) {
+            var cities = this.props.countriesJson[country]['cities'];
+            var circles = [];
+            for(var i = 1; i <= Object.keys(cities).length; i++) {
+                const latlng = [];
+                latlng.push(cities[i]['latitude']);
+                latlng.push(cities[i]['longitude']);
+                const hdi = Number(cities[i]['real_hdi'])
+                const text = "Name: " + cities[i]["city_name"] + "<br>" + "HDI: " + hdi; 
+                var color = "";
+                if(hdi >= 0.75) {
+                    color = "#99FF00";
+                } else if(hdi > 0.5) {
+                    color = "#FFFF00";
+                } else if(hdi == 0) {
+                    color = "#000000"
+                } else {
+                    color = "#F00";
+                }
+                const circle = Leaflet.circleMarker(latlng,{radius:5, color: color}).bindPopup(text);
+                circle.on('mouseover', function (e) {
+                    this.openPopup();
+                });
+                circle.on('mouseout', function (e) {
+                    this.closePopup();
+                });
+                
+                circles.push(circle);
+            } 
+            console.log("CIRCLES");
+            console.log(circles)
+            return circles;                             
+
+        } else {
+            const circles = this.props.countries.map((country) => {
+                const latlng = [];
+                latlng.push(this.props.countriesJson[country]['latitude']);
+                latlng.push(this.props.countriesJson[country]['longitude']);
+                const hdi = Number(this.props.countriesJson[country]['hdi']);
+                const text = "Name: " + country + "<br>" + "HDI: " + hdi; 
+                var color = "";
+                if(hdi >= 0.75) {
+                    color = "#99FF00";
+                } else if(hdi > 0.5) {
+                    color = "#FFFF00";
+                } else if(hdi == 0) {
+                    color = "#000000"
+                } else {
+                    color = "#F00";
+                }
+                const circle = Leaflet.circleMarker(latlng,{radius:hdi*15, color: color}).bindPopup(text);
+                circle.on('mouseover', function (e) {
+                    this.openPopup();
+                });
+                circle.on('mouseout', function (e) {
+                    this.closePopup();
+                });
+                
+                return circle;
+            });
+            return circles;
+        }
+    }
     // Click on the button, the map will fly to a place
     // latlng needs to be [lat,lng]
 
     clickFly(country, latlng, zoom){
+        var countryZoomer = {"Fly Back" : 2, "costarica" : 8, "brazil" : 5};
+        zoom = countryZoomer[country];
         mapRef.flyTo(latlng,zoom);
         mapRef.removeLayer(circleLayerGroup);
-        //Create Red Circles on City Data
+        //Create Circles on City Data
+        var circles;
+        if(country == "Fly Back") {
+            circles = this.makeCircles(country, false);
+        } else {
+            circles = this.makeCircles(country, true);
+        }
 
+        circleLayerGroup = Leaflet.layerGroup(circles);
+        mapRef.addLayer(circleLayerGroup);
+        //console.log(this.props.citiesJson);
         this.props.handleButtonClick(country);
-
     } 
 
     render() {

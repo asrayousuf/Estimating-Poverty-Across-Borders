@@ -210,7 +210,7 @@ class DataReader:
 		return frame
 
 	def parse_country(self):
-		with open('../data/country_hdi.csv') as csv_file:
+		with open('../data/country_hdi.csv', encoding="UTF-8") as csv_file:
 			csv_reader = csv.reader(csv_file, delimiter=',')
 			line_count = 0
 			for row in csv_reader:
@@ -227,7 +227,7 @@ class DataReader:
 						self.final_data[country_slug]["country_name"] = country
 						self.final_data[country_slug]["cities"] = {}
 						lower_country = row[3].lower()
-						with open('../data/country_hdi.csv') as second_fp:
+						with open('../data/country_hdi.csv', encoding="UTF-8") as second_fp:
 							read_csv = csv.reader(second_fp, delimiter=',')
 							for each_row in read_csv:
 								if lower_country ==each_row[4].lower():
@@ -239,7 +239,7 @@ class DataReader:
 				count+=1
 	
 	def parse_city(self):
-		with open('../data/city.csv') as csv_file:
+		with open('../data/city.csv', encoding="UTF-8") as csv_file:
 			csv_reader = csv.reader(csv_file, delimiter=',')
 			line_count = 0
 			for row in csv_reader:
@@ -257,7 +257,7 @@ class DataReader:
 				line_count +=1
 
 	def parse_features(self):
-		with open('../data/country_new.csv') as csv_file:
+		with open('../data/country_new.csv', encoding="UTF-8") as csv_file:
 			csv_reader = csv.reader(csv_file, delimiter=',')
 			line_count = 0
 			for row in csv_reader:
@@ -286,7 +286,7 @@ class DataReader:
 				line_count+=1
 	
 	def parse_prediction(self):
-		with open('../data/predictions.csv') as csv_file:
+		with open('../data/predictions.csv', encoding="UTF-8") as csv_file:
 			csv_reader = csv.reader(csv_file, delimiter=',')
 			line_count = 0
 			for row in csv_reader:
