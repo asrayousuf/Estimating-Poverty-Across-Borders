@@ -119,7 +119,7 @@ const statsCardObjs = [
   statsCardTwitters,
 ];
 
-const targetCountries = ["Fly Back", "Brazil","Colombia"];
+const targetCountries = ["Fly Back", "brazil","colombia"];
 
 class Dashboard extends Component {
 
@@ -138,7 +138,7 @@ class Dashboard extends Component {
 
     // Fetech the countries data
     var proxyUrl = 'https://cors-anywhere.herokuapp.com/',
-        targetUrl = 'http://rosygupta.pythonanywhere.com';
+        targetUrl = 'http://c51a1e79.ngrok.io/get_data/';
     fetch(proxyUrl + targetUrl)
         .then(res => res.json())
         .then(
@@ -147,7 +147,7 @@ class Dashboard extends Component {
                 for(var country in result){
                     countries.push(country);
                 }
-
+                console.log(result);
                 const countriesJson = result;
                 const citiesJson = targetCountries.map((target)=>{
                     if(target == "Fly Back")
@@ -204,7 +204,6 @@ class Dashboard extends Component {
             </Row>
             <Row>
               <Col md={16}>
-                <div>
                   <BarChart
                     title="BarChart"
                     category="Map"
@@ -213,14 +212,15 @@ class Dashboard extends Component {
                     data={[5, 10, 1, 3]}
                     size={[200, 300]}
                     />
-                    <LeafMap 
-                      countriesJson={this.state.countriesJson}
-                      citiesJson={this.state.citiesJson}
-                      countries={this.state.countries} 
-                      targetCountries ={targetCountries}
-                      handleButtonClick={this.handleButtonClick}/>
-                </div>
               </Col> 
+              <Col md={16}>
+                <LeafMap 
+                    countriesJson={this.state.countriesJson}
+                    citiesJson={this.state.citiesJson}
+                    countries={this.state.countries} 
+                    targetCountries ={targetCountries}
+                    handleButtonClick={this.handleButtonClick}/>
+              </Col>
             </Row>
           </Grid>
         </div>
