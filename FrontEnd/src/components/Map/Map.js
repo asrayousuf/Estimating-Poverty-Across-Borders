@@ -1,21 +1,12 @@
 import React, { Component } from "react";
 
 import {
-    Circle,
-    CircleMarker,
-    FeatureGroup,
-    LayerGroup,
-    LayersControl,
     Map,
-    Marker,
-    Popup,
-    Rectangle,
     TileLayer,
   } from 'react-leaflet';
 import Leaflet  from 'leaflet'
 import {Button,ButtonToolbar,ProgressBar} from 'react-bootstrap';
 
-const { BaseLayer, Overlay } = LayersControl
 const leafMapCss = "//cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css";
 
 const icon = new Leaflet.Icon({
@@ -35,66 +26,32 @@ const buttonToolBarStyle = { maxWidth: 400, margin: '0 auto 10px' };
 let circleLayerGroup = null;
 
 class LeafMap extends Component {
+    countries = [];
+    countriesJson = null;
+    citiesJson = null;
     constructor(props){
-    	super(props)
-        this.state = {
-            checked: false,
-            error: null,
-            isLoaded: false,
-            countries: [],
-            countriesJson: {},
-            targetCountries: ["Fly Back", "Brazil","Colombia"],
-        };
+        super(props);
+        // Props contains 
+        // - countries,
+        // - countriesJson,
+        // - citiesJson,
+        // - targetCountries
+        // You can take it out by using this.props.XXXX
     }
-
 
     componentDidMount(){
-
-        // Fetech the countries data
-        var proxyUrl = 'https://cors-anywhere.herokuapp.com/',
-            targetUrl = 'http://rosygupta.pythonanywhere.com';
-        fetch(proxyUrl + targetUrl)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    const countries = [];
-                    for(var country in result){
-                        countries.push(country);
-                    }
-                    this.setState({
-                        isLoaded: true,
-                        countries,
-                        countriesJson: result,
-                    });
-                },
-                (error) => {
-                    this.setState({
-                        isLoaded: true,
-                        error
-                    });
-                }
-            )
-    }
-
-    componentDidUpdate(){
-        if(!this.state.isLoaded){
-            return;
-        }
-        // Create map reference element
         mapRef = this.refs.map.leafletElement.setZoom(2);
         mapRef.doubleClickZoom.disable();
         mapRef.scrollWheelZoom.disable();
         mapRef.dragging.disable();
 
         // Create the needed circles    
-        const countries = this.state.countries;
-        const countriesJson = this.state.countriesJson;
 
-        const circles = countries.map((country) => {
+        const circles = this.props.countries.map((country) => {
             const latlng = [];
-            latlng.push(countriesJson[country]['latitude']);
-            latlng.push(countriesJson[country]['longitude']);
-            const hdi = Number(countriesJson[country]['hdi'])*15;
+            latlng.push(this.props.countriesJson[country]['latitude']);
+            latlng.push(this.props.countriesJson[country]['longitude']);
+            const hdi = Number(this.props.countriesJson[country]['hdi'])*15;
             const text = "Name: " + country + "<br>" + "HDI: " + hdi; 
             
             const circle = Leaflet.circleMarker(latlng,{radius:hdi}).bindPopup(text);
@@ -110,6 +67,7 @@ class LeafMap extends Component {
 
         circleLayerGroup = Leaflet.layerGroup(circles);
         mapRef.addLayer(circleLayerGroup);
+
 
     }
 
@@ -130,45 +88,19 @@ class LeafMap extends Component {
         }
 
         // Map basic parameters
-        const data = this.props.data;
-        const originPosition = [data.lat, data.lng];
-        const originZoom = data.zoom;
-
-        // All the circles
-        const countries = this.state.countries;
-        const countriesJson = this.state.countriesJson;
-        const circles = countries.map((country,idx) => {
-            const latlng = [];
-            latlng.push(countriesJson[country]['latitude']);
-            latlng.push(countriesJson[country]['longitude']);
-            const hdi = Number(countriesJson[country]['hdi']);
-            const text = "Name: " + country + "<br>" + "HDI: " + hdi; 
-            return (<CircleMarker
-                key = {country}
-                ref={'circle'+idx}
-                center={latlng}
-                radius={(hdi)*15}
-                onMouseOver={() => {
-                    this.refs['circle'+idx].leafletElement.bindPopup(text).openPopup();
-                }}
-                onMouseOut={() => {
-                    this.refs['circle'+idx].leafletElement.closePopup();
-                }}/>);
-        });
+        const originPosition = [51.505, -0.09];
+        const originZoom = 2;
 
         // Fly-to button
-        const targetCountries = this.state.targetCountries;
+        const targetCountries = this.props.targetCountries;
         const buttons = targetCountries.map((country) =>{
             if(country == "Fly Back"){
                 return  <Button key = { country} onClick={() => this.clickFly(country,originPosition,originZoom)}>{country}</Button>
             }
-            const latlng = [countriesJson[country]['latitude'], countriesJson[country]['longitude']];
+            const latlng = [this.props.countriesJson[country]['latitude'], this.props.countriesJson[country]['longitude']];
             const zoom = 5;
             return <Button key = { country} onClick={() => this.clickFly(country,latlng,zoom)}>{country}</Button>
         })
-
-
-        const center = [51.505, -0.09]        
         
         const leftmap = (
             <div>
@@ -178,15 +110,6 @@ class LeafMap extends Component {
                     attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png">
                     </TileLayer>
-                    {/* <Overlay checked={false}>
-                        <Circle center={center} fillColor="blue" radius={200} />
-                        <Circle
-                            center={center}
-                            fillColor="red"
-                            radius={100}
-                            stroke={false}
-                        /> 
-                    </Overlay> */}
                 </Map>
             </div>);
 
