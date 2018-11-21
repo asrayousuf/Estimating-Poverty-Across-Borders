@@ -21,7 +21,9 @@ import {
   // legendBar
 } from "variables/Variables.jsx";
 
-import BarChart from '../../d3_components/BarChart';
+import D3_1 from '../../d3_components/D3_1';
+import D3_2 from '../../d3_components/D3_2';
+
 
 // Info of different years
 const years = ["2016", "2017"];
@@ -202,17 +204,25 @@ class Dashboard extends Component {
               {statsCards}
             </Row>
             <Row>
-              <Col md={16}>
-                  <BarChart
-                    title="BarChart"
-                    category="Map"
-                    stats="Last Update: time"
-                    statsIcon="fa fa-clock-o"
+              <Col md={6}>
+                  <D3_1
+                    title="D3_1"
                     data={[5, 10, 1, 3]}
-                    size={[200, 300]}
+                    countriesJson={this.state.countriesJson}
+                    citiesJson={this.state.citiesJson}
+                    countries={this.state.countries} 
+                    targetCountries ={targetCountries}
+                  />
+                  <D3_2
+                    title="D3_2"
+                    data={[5, 10, 1, 3]}
+                    countriesJson={this.state.countriesJson}
+                    citiesJson={this.state.citiesJson}
+                    countries={this.state.countries} 
+                    targetCountries ={targetCountries}
                     />
               </Col> 
-              <Col md={16}>
+              <Col md={6}>
                 <LeafMap 
                     countriesJson={this.state.countriesJson}
                     citiesJson={this.state.citiesJson}

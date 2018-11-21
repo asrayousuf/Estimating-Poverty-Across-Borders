@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
 import Wrapper from 'd3_components/Wrapper';
-import { scaleLinear } from "d3-scale";
-import { max } from "d3-array";
-import { select } from "d3-selection";
 import * as d3 from "d3";
 
 const data = {
@@ -38,10 +35,18 @@ for (var key in data){
 	})
 };
 
-class BarChart extends Component {
+class D3_2 extends Component {
 	constructor(props){
     	super(props)
         this.createBarChart = this.createBarChart.bind(this)
+        // You can access the data through 
+        // this.props.XXXX 
+        // includes
+        // - countriesJson
+        // - citiesJson
+        // - countries
+        // - targetCountries
+
    	}
    	componentDidMount() {
       	this.createBarChart()
@@ -50,12 +55,16 @@ class BarChart extends Component {
     	this.createBarChart()
    	}
    	createBarChart() {
-        // const node = this.node 
-
         var margin = {top: 80, right: 180, bottom: 80, left: 180},
             width = 300 - margin.left - margin.right,
             height = 300 - margin.top - margin.bottom;
 
+        // This may have problem
+        // Because if you create 2 svgs, using d3.select("svg")
+        // D3 may only select 1
+        // I have no time to figure it out
+        // The key word may be 
+        // Reference/ D3/ ID/ React/ D3.select
         var svg = d3.select("svg");
 
         var x = d3.scaleOrdinal()
@@ -106,20 +115,14 @@ class BarChart extends Component {
         return( 
             <Wrapper 
                 title={this.props.title}
-                category={this.props.category}
                 hCenter={this.props.hCenter}
                 ctAllIcons={this.props.ctAllIcons}
                 ctTableFullWidth={this.props.ctTableFullWidth}
                 ctTableUpgrade={this.props.ctTableUpgrade}
-                stats={this.props.stats}
-                statsIcon={this.props.stats.statsIcon}
                 size={this.props.size} >
-                        
-				<svg ref={node => this.node = node}
-                        width={this.props.size[0]} height={this.props.size[1]}>
-                </svg>      
+				<svg ref={node => this.node = node} />
             </Wrapper>
         );
     }
 }
-export default BarChart;
+export default D3_2;
