@@ -139,7 +139,7 @@ class Dashboard extends Component {
   componentDidMount(){
     // Fetech the countries data
     var proxyUrl = 'https://cors-anywhere.herokuapp.com/',
-        targetUrl = 'http://c51a1e79.ngrok.io/get_data/';
+        targetUrl = 'https://shrouded-lake-82256.herokuapp.com/get_data/';
     fetch(proxyUrl + targetUrl)
         .then(res => res.json())
         .then(
