@@ -37,9 +37,6 @@ class Dashboard extends Component {
   render() {
     return (
       <div className="wrapper">
-        <Sidebar {...this.props} />
-        <div id="main-panel" className="main-panel" ref="mainPanel">
-          {/* <Header {...this.props} /> */}
           <Switch>
             {dashboardRoutes.map((prop, key) => {
               return (
@@ -48,7 +45,6 @@ class Dashboard extends Component {
             })}
           </Switch>
           <Footer />
-        </div>
       </div>
     );
   }
