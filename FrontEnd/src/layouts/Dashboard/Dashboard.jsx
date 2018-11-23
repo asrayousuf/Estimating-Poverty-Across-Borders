@@ -35,6 +35,7 @@ class Dashboard extends Component {
   render() {
     return (
       <div className="wrapper">
+      <Header {...this.props} />
           <Switch>
             {dashboardRoutes.map((prop, key) => {
               return (
@@ -42,7 +43,7 @@ class Dashboard extends Component {
               );
             })}
           </Switch>
-          <Footer />
+          {/* <Footer /> */}
       </div>
     );
   }
