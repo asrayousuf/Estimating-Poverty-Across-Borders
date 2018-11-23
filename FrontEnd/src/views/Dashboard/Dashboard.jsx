@@ -1,36 +1,17 @@
 import React, { Component } from "react";
-import ChartistGraph from "react-chartist";
 import { Grid, Row, Col, ProgressBar } from "react-bootstrap";
 
-import { Card } from "components/Card/Card.jsx";
 import { StatsCard } from "components/StatsCard/StatsCard.jsx";
-import { Tasks } from "components/Tasks/Tasks.jsx";
-import Tabss from "components/Tabss/Tabss";
 import LeafMap from "components/Map/Map";
-
-import {
-  dataPie,
-  // legendPie,
-  // dataSales,
-  // optionsSales,
-  // responsiveSales,
-  // legendSales,
-  dataBar,
-  optionsBar,
-  responsiveBar,
-  // legendBar
-} from "variables/Variables.jsx";
 
 import D3_1 from '../../d3_components/D3_1';
 import D3_2 from '../../d3_components/D3_2';
 
 
 // Info of different years
-const years = ["2016", "2017"];
-
 /*
  * Info of different countries
- */ 
+  
 
 const worldStats = {
   "population": "7.7B",
@@ -79,7 +60,7 @@ const costaricaStats = {
   "revenue": "0.5M/ppl",
   "twitters": "1M/ppl",
 };
-
+*/
 
 // Stats Card Object
 const statsCardPopulation = {
@@ -121,7 +102,14 @@ const statsCardObjs = [
   statsCardTwitters,
 ];
 
-const targetCountries = ["Fly Back", "brazil","colombia", "costarica"];
+const targetCountries = ["Fly Back", "Brazil","Colombia", "Costa Rica", "Pakistan", "Mexico", "Poland", "Nigeria"];
+const countryMapper = {"Brazil" : "brazil",
+                       "Colombia" : "colombia",
+                       "Costa Rica" : "costarica",
+                       "Pakistan" : "pakistan",
+                       "Mexico" : "mexico",
+                       "Poland" : "poland",
+                       "Nigeria" : "nigeria"};
 
 class Dashboard extends Component {
 
@@ -133,7 +121,10 @@ class Dashboard extends Component {
       citiesJson: {},
       countries: [],
       statsCardObjs: statsCardObjs,
+      selectedCountry: "Fly Back",
     };
+
+    this.handleButtonClick = this.handleButtonClick.bind(this)
   }
 
   componentDidMount(){
@@ -151,9 +142,9 @@ class Dashboard extends Component {
                 //console.log(result);
                 const countriesJson = result;
                 const citiesJson = targetCountries.map((target)=>{
-                    if(target == "Fly Back")
+                    if(target === "Fly Back")
                         return;
-                    return countriesJson[target]['cities']
+                    return countriesJson[countryMapper[target]]['cities']
                 });
         
                 this.setState({
@@ -176,6 +167,8 @@ class Dashboard extends Component {
   handleButtonClick(country){
     statsCardPopulation.name = country;
     statsCardPopulation.value = null;
+    this.setState({selectedCountry:country});
+    
   }
 
   render() {
@@ -212,6 +205,7 @@ class Dashboard extends Component {
                     citiesJson={this.state.citiesJson}
                     countries={this.state.countries} 
                     targetCountries ={targetCountries}
+                    selectedCountry={this.state.selectedCountry}
                   />
                   <D3_2
                     title="D3_2"
@@ -220,7 +214,8 @@ class Dashboard extends Component {
                     citiesJson={this.state.citiesJson}
                     countries={this.state.countries} 
                     targetCountries ={targetCountries}
-                    />
+                    selectedCountry={this.state.selectedCountry}
+                  />
               </Col> 
               <Col md={6}>
                 <LeafMap 
