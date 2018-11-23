@@ -5,10 +5,11 @@ import {
     TileLayer,
   } from 'react-leaflet';
 import Leaflet  from 'leaflet'
-import {Button,ButtonToolbar,ProgressBar} from 'react-bootstrap';
+import {Button,ButtonToolbar} from 'react-bootstrap';
 
 const leafMapCss = "//cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css";
 
+/*
 const icon = new Leaflet.Icon({
     iconUrl: require('./marker-icon-2x.png'),
     iconSize:     [20, 30], // size of the icon
@@ -17,6 +18,7 @@ const icon = new Leaflet.Icon({
     shadowAnchor: [4, 62],  // the same for the shadow
     popupAnchor:  [-3, -76]// point from which the popup should open relative to the iconAnchor
 })
+*/
 
 let mapRef = null;
 
@@ -110,7 +112,7 @@ class LeafMap extends Component {
                     color = "#99FF00";
                 } else if(hdi > 0.5) {
                     color = "#FFFF00";
-                } else if(hdi == 0) {
+                } else if(hdi === 0) {
                     color = "#000000"
                     opacity = 0;
                 } else {
@@ -126,8 +128,8 @@ class LeafMap extends Component {
                 
                 circles.push(circle);
             } 
-            console.log("CIRCLES");
-            console.log(circles)
+            // console.log("CIRCLES");
+            // console.log(circles)
             return circles;                             
 
         } else {
@@ -142,7 +144,7 @@ class LeafMap extends Component {
                     color = "#99FF00";
                 } else if(hdi > 0.5) {
                     color = "#FFFF00";
-                } else if(hdi == 0) {
+                } else if(hdi === 0) {
                     color = "#000000"
                 } else {
                     color = "#F00";
@@ -167,7 +169,7 @@ class LeafMap extends Component {
         var countryZoomer = {"Fly Back" : 2, "costarica" : 8, "brazil" : 5,
         "nigeria" : 6, "poland" : 6, "pakistan" : 5, "mexico" : 5, "colombia" : 6};
         zoom = countryZoomer[country];
-        if(zoom == null) {
+        if(zoom === null) {
             zoom = 5;
         }
 
@@ -176,7 +178,7 @@ class LeafMap extends Component {
         
         //Create Circles on City Data
         var circles;
-        if(country == "Fly Back") {
+        if(country === "Fly Back") {
             circles = this.makeCircles(country, false);
         } else {
             circles = this.makeCircles(country, true);
@@ -199,7 +201,7 @@ class LeafMap extends Component {
         const targetCountries = this.props.targetCountries;
         const buttons = targetCountries.map((country) =>{
 
-            if(country == "Fly Back"){
+            if(country === "Fly Back"){
                 return  <Button key = { country} onClick={() => this.clickFly(country,originPosition,originZoom)}>{country}</Button>
             }
             var country_key = countryMapper[country];
