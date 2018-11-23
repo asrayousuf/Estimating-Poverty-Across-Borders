@@ -18,6 +18,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.externals import joblib
 from matplotlib import rcParams
+import pandas as pd 
 
 class Regressor:
 
@@ -30,7 +31,7 @@ class Regressor:
 		self.name.replace(" ", "")
 
 		if load_model:
-			self.model = joblib.load("../models/" + self.name + '.joblib') 
+			self.model = joblib.load("../models/" + self.name + '_2017.joblib') 
 
 	def train(self, model, save=False, make_chart=False):
 		"""
@@ -66,7 +67,7 @@ class Regressor:
 			print(cols[i], importances[i])
 
 		if save:
-			joblib.dump(self.model.best_estimator_, "../models/" + self.name + ".joblib")
+			joblib.dump(self.model.best_estimator_, "../models/" + self.name + "_2017.joblib")
 
 	
 		print("------------------------")
@@ -125,9 +126,18 @@ class Regressor:
 		X_cols.remove('popularity_2017')
 		X_cols.remove('hdi_estimated_2016')
 		X_cols.remove('hdi_estimated_2017')
+
+		####2017####
+		X_cols.remove('activity_2016_h0-5')
+		X_cols.remove('activity_2016_h6-11')
+		X_cols.remove('activity_2016_h12-17')
+		X_cols.remove('activity_2016_h18-23')
+
+		X_cols.remove('average_inflow_2016')
+		X_cols.remove('average_outflow_2016')
 		X = df[X_cols]
 
-		return self.model.predict(input_data)
+		return self.model.predict(X)
 
 	def preprocess(self, df):
 		"""
@@ -160,6 +170,17 @@ class Regressor:
 		X_cols.remove('popularity_2017')
 		X_cols.remove('hdi_estimated_2016')
 		X_cols.remove('hdi_estimated_2017')
+
+		###2016 Predictions####
+		X_cols.remove('activity_2016_h0-5')
+		X_cols.remove('activity_2016_h6-11')
+		X_cols.remove('activity_2016_h12-17')
+		X_cols.remove('activity_2016_h18-23')
+		X_cols.remove('average_inflow_2016')
+		X_cols.remove('average_outflow_2016')
+
+		###2017 Predictions####
+		
 		X = df[X_cols]
 		X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=True, random_state=42)
 		return X_train.astype('float'), X_test.astype('float'), y_train.astype('float'), y_test.astype('float')
@@ -171,12 +192,26 @@ class Regressor:
 #testing_ma_error = []
 #testing_mse = []
 #mod = RandomForestRegressor(bootstrap=True, criterion='mae', n_estimators=100)
-mod = RandomForestRegressor()
-r = Regressor("Random Forest")
-cv, ma, mse = r.train(mod, save=False, make_chart=False)
+#mod = RandomForestRegressor()
+#r = Regressor("Random Forest", load_model=True)
+#reader = DataReader()
+#df = reader.create_input_data()
+#df = r.preprocess(df)
+#predictions = r.predict(df)
+#cv, ma, mse = r.train(mod, save=True, make_chart=False)
 #cv_error.append(cv)
 #testing_ma_error.append(ma)
 #testing_mse.append(mse)
+#print(predictions)
+#output_df = pd.DataFrame(columns=['codmun', 'country', 'HDI_2016'])
+#output_df['codmun'] = df['codmun']
+#output_df['country'] = df['Country']
+#output_df['HDI_2017'] = predictions
+#print(output_df)
+#output_df.to_csv("../data/predictions_2017", index=False)
+
+###Testing###
+
 
 ############################
 
