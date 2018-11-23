@@ -8,11 +8,11 @@ import D3_1 from '../../d3_components/D3_1';
 import D3_2 from '../../d3_components/D3_2';
 
 
+// Info of different years
 /*
  * Info of different countries
- */ 
+  
 
- /*
 const worldStats = {
   "population": "7.7B",
   "revenue": "0.5M/ppl",
@@ -123,6 +123,8 @@ class Dashboard extends Component {
       statsCardObjs: statsCardObjs,
       selectedCountry: "Fly Back",
     };
+
+    this.handleButtonClick = this.handleButtonClick.bind(this)
   }
 
   componentDidMount(){
@@ -163,7 +165,10 @@ class Dashboard extends Component {
 
 
   handleButtonClick(country){
+    statsCardPopulation.name = country;
+    statsCardPopulation.value = null;
     this.setState({selectedCountry:country});
+    
   }
 
   render() {
@@ -210,7 +215,7 @@ class Dashboard extends Component {
                     countries={this.state.countries} 
                     targetCountries ={targetCountries}
                     selectedCountry={this.state.selectedCountry}
-                    />
+                  />
               </Col> 
               <Col md={6}>
                 <LeafMap 

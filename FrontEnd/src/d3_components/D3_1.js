@@ -53,7 +53,7 @@ class D3_1 extends Component {
         // - citiesJson
         // - countries
         // - targetCountries
-        // - selectedCountry (this country selected by button)
+        // - selectedCountry (this country selected by button on the top of map)
    
     }
 
