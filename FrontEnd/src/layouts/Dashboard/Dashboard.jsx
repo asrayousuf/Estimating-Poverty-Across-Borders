@@ -5,7 +5,7 @@ import { Route,
 } from "react-router-dom";
 
 import Header from "components/Header/Header";
-import Footer from "components/Footer/Footer";
+//import Footer from "components/Footer/Footer";
 import Sidebar from "components/Sidebar/Sidebar";
 
 import dashboardRoutes from "routes/dashboard.jsx";
@@ -37,6 +37,7 @@ class Dashboard extends Component {
   render() {
     return (
       <div className="wrapper">
+       <Header {...this.props} />
           <Switch>
             {dashboardRoutes.map((prop, key) => {
               return (
@@ -44,7 +45,7 @@ class Dashboard extends Component {
               );
             })}
           </Switch>
-          <Footer />
+       {/* <Footer /> */}
       </div>
     );
   }

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Navbar } from "react-bootstrap";
+import logo from "images/UNICEF-Logo.jpg";
 
-// import HeaderLinks from "./HeaderLinks.jsx";
+import HeaderLinks from "./HeaderLinks.jsx";
 
 import dashboardRoutes from "routes/dashboard.jsx";
 
@@ -59,7 +60,7 @@ class Header extends Component {
       <Navbar fluid>
         <Navbar.Header>
           <Navbar.Brand>
-            {this.getBrand()}
+            <a href="#"><img src={logo} />Estimating Poverty Across Borders</a>
           </Navbar.Brand>
           <Navbar.Toggle onClick={this.mobileSidebarToggle} />
         </Navbar.Header>
