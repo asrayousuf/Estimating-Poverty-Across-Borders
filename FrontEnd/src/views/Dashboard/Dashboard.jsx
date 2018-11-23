@@ -194,7 +194,7 @@ class Dashboard extends Component {
         <div className="content">
           <Grid fluid>
             <Row>
-              {statsCards}
+              {/*{statsCards}*/}
             </Row>
             <Row>
               <Col md={6}>
