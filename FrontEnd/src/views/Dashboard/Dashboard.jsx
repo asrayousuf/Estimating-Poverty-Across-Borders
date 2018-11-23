@@ -121,7 +121,14 @@ const statsCardObjs = [
   statsCardTwitters,
 ];
 
-const targetCountries = ["Fly Back", "brazil","colombia", "costarica"];
+const targetCountries = ["Fly Back", "Brazil","Colombia", "Costa Rica", "Pakistan", "Mexico", "Poland", "Nigeria"];
+const countryMapper = {"Brazil" : "brazil",
+                       "Colombia" : "colombia",
+                       "Costa Rica" : "costarica",
+                       "Pakistan" : "pakistan",
+                       "Mexico" : "mexico",
+                       "Poland" : "poland",
+                       "Nigeria" : "nigeria"};
 
 class Dashboard extends Component {
 
@@ -153,7 +160,7 @@ class Dashboard extends Component {
                 const citiesJson = targetCountries.map((target)=>{
                     if(target == "Fly Back")
                         return;
-                    return countriesJson[target]['cities']
+                    return countriesJson[countryMapper[target]]['cities']
                 });
         
                 this.setState({
