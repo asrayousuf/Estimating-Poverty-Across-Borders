@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Wrapper from 'd3_components/Wrapper';
 import * as d3 from "d3";
+import Select from 'react-select';
 
 const data = {
     "Afghanistan": {
@@ -25,19 +26,25 @@ const data = {
     }, 
 };
 
+const options = [
+  { value: 'Country', label: 'Country' },
+  { value: 'Mun', label: 'Mun' },
+  { value: 'City', label: 'City' }
+];
+
 var arr= [];
 for (var key in data){
-	arr.push({
-		"country": key,
-		"hdi": data[key]["hdi"],
-		"latitude": data[key]["latitude"],
-		"longitude": data[key]["longitude"]
-	})
+  arr.push({
+    "country": key,
+    "hdi": data[key]["hdi"],
+    "latitude": data[key]["latitude"],
+    "longitude": data[key]["longitude"]
+  })
 };
 
 class D3_1 extends Component {
-	constructor(props){
-    	super(props)
+  constructor(props){
+      super(props)
         this.createBarChart = this.createBarChart.bind(this)
         // You can access the data through 
         // this.props.XXXX 
@@ -46,15 +53,29 @@ class D3_1 extends Component {
         // - citiesJson
         // - countries
         // - targetCountries
+   
+    }
 
-   	}
-   	componentDidMount() {
-      	this.createBarChart()
-   	}
-   	componentDidUpdate() {
-    	this.createBarChart()
-   	}
-   	createBarChart() {
+    state = {
+        selectedOption: null,
+      }
+
+    handleChange = (selectedOption) => {
+      this.setState({ selectedOption });
+      console.log(`Option selected:`, selectedOption['value']);
+      var data_t= this.props.countriesJson;
+      console.log(data_t);
+      return 
+        // console.log(this.data_t);
+    }
+    componentDidMount() {
+        this.createBarChart()
+    }
+    componentDidUpdate() {
+      this.createBarChart()
+    }
+    createBarChart() {
+        console.log(this.data_t);
         var margin = {top: 80, right: 180, bottom: 80, left: 180},
             width = 300 - margin.left - margin.right,
             height = 300 - margin.top - margin.bottom;
@@ -68,12 +89,12 @@ class D3_1 extends Component {
         var svg = d3.select("svg");
 
         var x = d3.scaleOrdinal()
-		.domain(arr.map(function(d) { return d.country; }))
+    .domain(arr.map(function(d) { return d.country; }))
         .range([0, width]);
         
         var y= d3.scaleLinear()
-			.domain([0, d3.max(arr, function(d) { return d.hdi; })])
-			.range([height, 0]);
+      .domain([0, d3.max(arr, function(d) { return d.hdi; })])
+      .range([height, 0]);
         
             var xAxis = d3.axisTop(x)
         
@@ -107,11 +128,14 @@ class D3_1 extends Component {
       .attr("width","20")
       .style("fill","red")
       .attr("y", function(d) { 
-      	return y(d.hdi); })
+        return y(d.hdi); })
       .attr("height", function(d, i) { 
-      	return height - y(d.hdi); });
+        return height - y(d.hdi); });
     }
+    
+
     render() {
+      const { selectedOption } = this.state;
         return( 
             <Wrapper 
                 title={this.props.title}
@@ -120,7 +144,13 @@ class D3_1 extends Component {
                 ctTableFullWidth={this.props.ctTableFullWidth}
                 ctTableUpgrade={this.props.ctTableUpgrade}
                 size={this.props.size} >
-				<svg ref={node => this.node = node} />
+        <svg ref={node => this.node = node} />
+        <Select
+        value={selectedOption}
+        onChange={this.handleChange}
+        options={options}
+        />
+        
             </Wrapper>
         );
     }
