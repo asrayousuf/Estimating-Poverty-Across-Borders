@@ -213,6 +213,16 @@ class DataReader:
 		with open('../data/country_hdi.csv', encoding="UTF-8") as csv_file:
 			csv_reader = csv.reader(csv_file, delimiter=',')
 			line_count = 0
+			zoom_level = {
+				'brazil': 1,
+				'costarica': 4,
+				'nepal': 4,
+				'pakistan': 3,
+				'poland': 4,
+				'mexico': 2,
+				'colombia': 3, 
+				'nigeria': 3,
+			}
 			for row in csv_reader:
 				if line_count==0:
 					pass
@@ -221,6 +231,7 @@ class DataReader:
 						country = row[3]
 						country_slug = ''.join(country.split()).lower()
 						self.final_data[country_slug] = {}
+						self.final_data[country_slug]["zoom"] = zoom_level.get(country_slug)
 						self.final_data[country_slug]["latitude"] = row[1]
 						self.final_data[country_slug]["longitude"] = row[2]
 						self.final_data[country_slug]["hdi"] = str(0)
@@ -286,7 +297,7 @@ class DataReader:
 				line_count+=1
 	
 	def parse_prediction(self):
-		with open('../data/predictions.csv', encoding="UTF-8") as csv_file:
+		with open('../data/predictions_2016.csv', encoding="UTF-8") as csv_file:
 			csv_reader = csv.reader(csv_file, delimiter=',')
 			line_count = 0
 			for row in csv_reader:
@@ -297,8 +308,22 @@ class DataReader:
 					codmun = row[0]
 					if country in self.final_data.keys():
 						if self.final_data[country]['cities'] and codmun in self.final_data[country]['cities'].keys():
-							self.final_data[country]['cities'][codmun]['predicted_hdi'] = row[2]
+							self.final_data[country]['cities'][codmun]['predicted_hdi_2016'] = row[2]
 				line_count+=1
+		with open('../data/predictions_2017.csv', encoding="UTF-8") as csv_file:
+			csv_reader = csv.reader(csv_file, delimiter=',')
+			line_count = 0
+			for row in csv_reader:
+				if line_count==0:
+					pass
+				else:
+					country =row[1]
+					codmun = row[0]
+					if country in self.final_data.keys():
+						if self.final_data[country]['cities'] and codmun in self.final_data[country]['cities'].keys():
+							self.final_data[country]['cities'][codmun]['predicted_hdi_2017'] = row[3]
+				line_count+=1
+
 
 
 #Example
