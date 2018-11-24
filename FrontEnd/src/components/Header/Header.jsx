@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Navbar } from "react-bootstrap";
 import logo from "images/UNICEF-logo.jpg";
 
-// import HeaderLinks from "./HeaderLinks.jsx";
+import HeaderLinks from "./HeaderLinks.jsx";
 
 import dashboardRoutes from "routes/dashboard.jsx";
 
