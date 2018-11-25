@@ -194,9 +194,12 @@ class Regressor:
 #mod = RandomForestRegressor(bootstrap=True, criterion='mae', n_estimators=100)
 #mod = RandomForestRegressor()
 #r = Regressor("Random Forest", load_model=True)
+#importances = r.model.feature_importances_
 #reader = DataReader()
 #df = reader.create_input_data()
 #df = r.preprocess(df)
+#df,a,b,c = r.split_data(df)
+#cols = df.columns
 #predictions = r.predict(df)
 #cv, ma, mse = r.train(mod, save=True, make_chart=False)
 #cv_error.append(cv)
@@ -295,3 +298,12 @@ ax.set_ylabel('Testing Mean Squared Error')
 ax.set_title('Testing Mean Squared Error by Regressor')
 fig.savefig("testing_mse")
 """
+
+#fig, ax = plt.subplots()
+#plt.bar(range(len(importances)), importances)
+#ax.set_xticks([i for i in range(len(importances))])
+#ax.set_xticklabels(cols, rotation='vertical')
+#ax.set_ylabel('Importance')
+#ax.set_title('Feature Importances for HDI 2017 Prediction')
+#plt.tight_layout()
+#fig.savefig("../diagrams/feature_importance_2017")
