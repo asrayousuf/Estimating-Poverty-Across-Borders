@@ -56,11 +56,16 @@ class Header extends Component {
     return name;
   }
   render() {
+    var styles = {
+      float: 'left', 
+      width : '60px', 
+      height: '50px',
+    };
     return (
       <Navbar fluid>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="#"><img src={logo} />Estimating Poverty Across Borders</a>
+            <a href="#"><img style={styles} src={logo} />Estimating Poverty Across Borders</a>
           </Navbar.Brand>
           <Navbar.Toggle onClick={this.mobileSidebarToggle} />
         </Navbar.Header>
