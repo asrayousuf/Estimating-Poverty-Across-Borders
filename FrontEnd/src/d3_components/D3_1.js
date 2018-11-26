@@ -65,7 +65,7 @@ class D3_1 extends Component {
       }
 
     componentDidMount() {
-        var svg = d3.select("svg");
+        var svg = d3.select("#svg1");
         chartG = svg.append('g')
                         .attr('transform', 'translate('+[padding.l, padding.t]+')');
         this.createBarChart()
@@ -90,7 +90,7 @@ class D3_1 extends Component {
         var t = d3.transition()
                     .duration(750);
 
-        var svg = d3.select("svg");
+        var svg = d3.select("#svg1");
         svg.selectAll(".bar").remove();
         svg.selectAll(".domain").remove();
 
@@ -245,7 +245,7 @@ class D3_1 extends Component {
                 size={this.props.size} >
 
          
-        <svg height="300" width="700" ref={node => this.node = node} />
+        <svg id="svg1" height="300" width="700" ref={node => this.node = node} />
         <Select
         value={selectedOption}
         isMulti
