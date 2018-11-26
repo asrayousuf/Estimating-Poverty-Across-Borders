@@ -201,7 +201,7 @@ class LeafMap extends Component {
         const targetCountries = this.props.targetCountries;
         const buttons = targetCountries.map((country) =>{
 
-            if(country === "Fly Back"){
+            if(country === "World"){
                 return  <Button key = { country} onClick={() => this.clickFly(country,originPosition,originZoom)}>{country}</Button>
             }
             var country_key = countryMapper[country];
