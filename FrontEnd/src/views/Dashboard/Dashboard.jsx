@@ -6,6 +6,7 @@ import LeafMap from "components/Map/Map";
 
 import D3_1 from '../../d3_components/D3_1';
 import D3_2 from '../../d3_components/D3_2';
+import D3_3 from '../../d3_components/D3_3';
 
 const targetCountries = ["Fly Back", "Brazil","Colombia", "Costa Rica", "Pakistan", "Mexico", "Poland", "Nigeria"];
 const countryMapper = {"Brazil" : "brazil",
@@ -80,7 +81,7 @@ class Dashboard extends Component {
         return <ProgressBar now={100}/>;
     }
     let d3_1 = <D3_1
-      title="D3_1"
+      title="HDI"
       countriesJson={this.state.countriesJson}
       citiesJson={this.state.citiesJson}
       countries={this.state.countries} 
@@ -88,7 +89,15 @@ class Dashboard extends Component {
       selectedCountry={this.state.selectedCountry}
       /> ;
     let d3_2 = <D3_2
-      title="D3_2"
+      title="Migration Inflow/Outflow"
+      countriesJson={this.state.countriesJson}
+      citiesJson={this.state.citiesJson}
+      countries={this.state.countries} 
+      targetCountries ={targetCountries}
+      selectedCountry={this.state.selectedCountry}
+    /> ;
+    let d3_3 = <D3_3
+      title="Infrastructure"
       countriesJson={this.state.countriesJson}
       citiesJson={this.state.citiesJson}
       countries={this.state.countries} 
@@ -113,6 +122,7 @@ class Dashboard extends Component {
                 <div>
                   {d3_1}
                   {d3_2}
+                  {d3_3}
                 </div>
                 }
               </Col> 

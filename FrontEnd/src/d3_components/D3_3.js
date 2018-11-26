@@ -23,7 +23,7 @@ var chartG = null;
 var padding = {t: 10, r: 10, b: 10, l: 10};
 var arr= [];
 
-class D3_2 extends Component {
+class D3_3 extends Component {
 	constructor(props){
     	super(props)
         this.createBarChart = this.createBarChart.bind(this)
@@ -38,10 +38,10 @@ class D3_2 extends Component {
         for (var key in this.props.citiesJson[3]){
           cities.push({
             "city": this.props.citiesJson[3][key]['city_name'],
-            "average_inflow_2016": this.props.citiesJson[3][key]['average_inflow_2016'],
-            "average_inflow_2017": this.props.citiesJson[3][key]['average_inflow_2017'],
-            "average_outflow_2016": this.props.citiesJson[3][key]['average_outflow_2016'],
-            "average_outflow_2017": this.props.citiesJson[3][key]['average_outflow_2017']
+            "average_inflow_2016": this.props.citiesJson[3][key]['government'],
+            "average_inflow_2017": this.props.citiesJson[3][key]['pharmacy'],
+            "average_outflow_2016": this.props.citiesJson[3][key]['bank'],
+            "average_outflow_2017": this.props.citiesJson[3][key]['secondary']
           });
         };
         // console.log(cities);
@@ -68,7 +68,7 @@ class D3_2 extends Component {
       }
 
     componentDidMount() {
-        var svg = d3.select("#svg2");
+        var svg = d3.select("#svg3");
         chartG = svg.append('g')
                         .attr('transform', 'translate('+[padding.l, padding.t]+')');
         this.createBarChart()
@@ -94,7 +94,7 @@ class D3_2 extends Component {
                     .duration(750);
 
         
-        var svg = d3.select("#svg2");
+        var svg = d3.select("#svg3");
         
         var svgWidth = +svg.attr('width');
         var svgHeight = +svg.attr('height');
@@ -117,8 +117,7 @@ class D3_2 extends Component {
         var z = d3.scaleOrdinal()
                 .range(["#98abc5","#ff8c00"]);
 
-        var keys= ["average_outflow_2017", "average_outflow_2016",
-         "average_inflow_2017", "average_inflow_2016"]
+        var keys= ["bank", "secondary", "pharmacy", "government"]
 
         // Make the y axis......
         chartG.append("g")
@@ -220,7 +219,7 @@ class D3_2 extends Component {
                 ctTableFullWidth={this.props.ctTableFullWidth}
                 ctTableUpgrade={this.props.ctTableUpgrade}
                 size={this.props.size} >
-        <svg id="svg2" height="300" width="700" ref={node => this.node = node} />
+        <svg id="svg3" height="300" width="700" ref={node => this.node = node} />
         
 
             <Select
@@ -234,4 +233,4 @@ class D3_2 extends Component {
         );
     }
 }
-export default D3_2;
+export default D3_3;
