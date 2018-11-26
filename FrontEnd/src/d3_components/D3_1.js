@@ -33,6 +33,22 @@ class D3_1 extends Component {
         // - countriesJson
         // - citiesJson
         // - countries
+        // var cities= []
+        // console.log(this.props.citiesJson);
+        // for (var key in this.props.citiesJson[3]){
+        //   cities.push({
+        //     "city": this.props.citiesJson[3][key]['city_name'],
+        //     "real_hdi": this.props.citiesJson[3][key]['real_hdi'],
+        //     "predicted_hdi": this.props.citiesJson[3][key]['predicted_hdi_2016']
+        //   });
+        // };
+        // // console.log(cities);
+        // for (var i in cities){
+        //   options.push({
+        //     'value': cities[i],
+        //     'label': cities[i]['city']
+        //   })
+        // };
     }
 
     state = {
@@ -49,7 +65,7 @@ class D3_1 extends Component {
       }
 
     componentDidMount() {
-        var svg = d3.select("svg");
+        var svg = d3.select("#svg1");
         chartG = svg.append('g')
                         .attr('transform', 'translate('+[padding.l, padding.t]+')');
         this.createBarChart()
@@ -73,8 +89,12 @@ class D3_1 extends Component {
         var t = d3.transition()
                     .duration(750);
 
-        
-        var svg = d3.select("svg");
+        var svg = d3.select("#svg1");
+        svg.selectAll(".bar").remove();
+        svg.selectAll(".domain").remove();
+
+
+
         
         var svgWidth = +svg.attr('width');
         var svgHeight = +svg.attr('height');
@@ -82,7 +102,7 @@ class D3_1 extends Component {
 
         // Compute chart dimensions
         var chartWidth = svgWidth - padding.l - padding.r;
-        var chartHeight = svgHeight - padding.t - padding.b-30;
+        var chartHeight = svgHeight - padding.t - padding.b;
 
         // Compute the spacing for bar bands based on all 26 letters
         var barBand = chartHeight / 26;
@@ -91,7 +111,7 @@ class D3_1 extends Component {
         
 
         var y = d3.scaleLinear()
-            .rangeRound([chartHeight, 0])
+            .rangeRound([0, chartHeight])
             .domain([0,1]);
 
         var z = d3.scaleOrdinal()
@@ -111,8 +131,7 @@ class D3_1 extends Component {
             .attr("dy", "0.32em")
             .attr("fill", "#000")
             .attr("font-weight", "bold")
-            .attr("text-anchor", "start")
-            .text("HDI");
+            .attr("text-anchor", "start");
 
         // Makes the legends......
         var legend = chartG.append("g")
@@ -166,22 +185,40 @@ class D3_1 extends Component {
                 return 'translate('+[(i*6 * barBand + 20), (chartHeight- y(d.real_hdi))]+')';
             });
 
+
         barsEnter.append('rect')
-            .transition(t)
-            
-            .attr('y', function(d){
-                chartHeight - y(d.real_hdi)
-            })
-            .attr('width', barHeight+30)
-            .attr('height', function(d){
-                return y(d.real_hdi)
-            })
-            .style("fill", z )
-            ;
+                .transition(t)
+                .attr('width', barHeight+10)
+                .attr('height', function(d){
+                    return y(d.real_hdi)
+                })
+                .style("fill", z );
+
+        barsEnter.append('rect')
+                .transition(t)                
+                .attr('x', barHeight+10)
+                .attr('y', function(d){
+                     return (y(d.real_hdi)-y(d.predicted_hdi));
+                })
+                .attr('width', barHeight+10)
+                .attr('height', function(d){
+                    return y(d.predicted_hdi)
+                })
+                .style("fill", z(1) );
+
 
         barsEnter.append('text')
             .attr('x', 0)
-            .attr('y', -10)
+            .attr('y', function(d){
+                if (d.real_hdi < d.predicted_hdi){
+                    console.log("in Here");
+                    return (y(d.real_hdi)- y(d.predicted_hdi)-10);
+                }
+                else{
+                    console.log("Not");
+                    return -10
+                }
+            })
             .text(function(d){
                 return d.city;
             });
@@ -228,12 +265,14 @@ class D3_1 extends Component {
                 ctTableFullWidth={this.props.ctTableFullWidth}
                 ctTableUpgrade={this.props.ctTableUpgrade}
                 size={this.props.size} >
-        <svg height="300" width="700" ref={node => this.node = node} />
-            <Select
+
+         
+        <svg id="svg1" height="300" width="700" ref={node => this.node = node} />
+        <Select
         value={selectedOption}
         isMulti
         onChange={this.handleChange}
-        options={options} />
+        options={options} />   
             </Wrapper>
             
             
