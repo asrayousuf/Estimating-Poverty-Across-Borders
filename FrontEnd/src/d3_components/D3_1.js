@@ -132,8 +132,7 @@ class D3_1 extends Component {
             .attr("dy", "0.32em")
             .attr("fill", "#000")
             .attr("font-weight", "bold")
-            .attr("text-anchor", "start")
-            .text("HDI");
+            .attr("text-anchor", "start");
 
         // Makes the legends......
         var legend = chartG.append("g")

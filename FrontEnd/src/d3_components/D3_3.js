@@ -38,10 +38,10 @@ class D3_3 extends Component {
         for (var key in this.props.citiesJson[3]){
           cities.push({
             "city": this.props.citiesJson[3][key]['city_name'],
-            "average_inflow_2016": this.props.citiesJson[3][key]['government'],
-            "average_inflow_2017": this.props.citiesJson[3][key]['pharmacy'],
-            "average_outflow_2016": this.props.citiesJson[3][key]['bank'],
-            "average_outflow_2017": this.props.citiesJson[3][key]['secondary']
+            "government": this.props.citiesJson[3][key]['government'],
+            "pharmacy": this.props.citiesJson[3][key]['pharmacy'],
+            "bank": this.props.citiesJson[3][key]['bank'],
+            "secondary": this.props.citiesJson[3][key]['secondary']
           });
         };
         // console.log(cities);
