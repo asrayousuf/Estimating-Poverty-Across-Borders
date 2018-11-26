@@ -87,9 +87,6 @@ class D3_3 extends Component {
 
     createBarChart() {
               
-        console.log(data_1);
-        
-
         var t = d3.transition()
                     .duration(750);
 

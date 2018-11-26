@@ -8,7 +8,6 @@ var data_1= [];
 var final_data= [];
 // - targetCountries
 var options = [];
-
 var arr= [];
 for (var key in data){
   arr.push({
@@ -33,22 +32,6 @@ class D3_1 extends Component {
         // - countriesJson
         // - citiesJson
         // - countries
-        // var cities= []
-        // console.log(this.props.citiesJson);
-        // for (var key in this.props.citiesJson[3]){
-        //   cities.push({
-        //     "city": this.props.citiesJson[3][key]['city_name'],
-        //     "real_hdi": this.props.citiesJson[3][key]['real_hdi'],
-        //     "predicted_hdi": this.props.citiesJson[3][key]['predicted_hdi_2016']
-        //   });
-        // };
-        // // console.log(cities);
-        // for (var i in cities){
-        //   options.push({
-        //     'value': cities[i],
-        //     'label': cities[i]['city']
-        //   })
-        // };
     }
 
     state = {
@@ -57,21 +40,42 @@ class D3_1 extends Component {
 
     handleChange = (selectedOption) => {
       data_1= [];
-      this.setState({ selectedOption });
       for (var key in selectedOption){
         data_1.push(selectedOption[key]['value'])
       };
-      return 
+      this.setState({ selectedOption });
+      return;
       }
 
     componentDidMount() {
         var svg = d3.select("#svg1");
         chartG = svg.append('g')
                         .attr('transform', 'translate('+[padding.l, padding.t]+')');
-        this.createBarChart()
+        this.createBarChart();
     }
     componentDidUpdate() {
-      this.createBarChart()
+      this.createBarChart();
+    }
+
+    updateData(){
+        const idx = (countries_idx.indexOf(this.props.selectedCountry));
+        var cities= [];
+
+        for (var key in this.props.citiesJson[idx]){
+          cities.push({
+            "city": this.props.citiesJson[idx][key]['city_name'],
+            "real_hdi": this.props.citiesJson[idx][key]['real_hdi'],
+            "predicted_hdi": this.props.citiesJson[idx][key]['predicted_hdi_2016']
+          });
+        };
+        options = [];
+        for (var i in cities){
+          options.push({
+            'value': cities[i],
+            'label': cities[i]['city']
+          })
+        };
+
     }
 
         // This may have problem
@@ -82,10 +86,7 @@ class D3_1 extends Component {
         // Reference/ D3/ ID/ React/ D3.select
 
 
-    createBarChart() {              
-        console.log(data_1);
-        
-
+    createBarChart() {                     
         var t = d3.transition()
                     .duration(750);
 
@@ -226,36 +227,13 @@ class D3_1 extends Component {
         bars.exit().remove();   
        };
 
-        
   };
        
     
 
     render() {
-        var cities= []
-        const idx = (countries_idx.indexOf(this.props.selectedCountry));
-
-        for (var key in this.props.citiesJson[idx]){
-          cities.push({
-            "city": this.props.citiesJson[idx][key]['city_name'],
-            "real_hdi": this.props.citiesJson[idx][key]['real_hdi'],
-            "predicted_hdi": this.props.citiesJson[idx][key]['predicted_hdi']
-          });
-        };
-        // console.log(cities);
-        for (var i in cities){
-          options.push({
-            'value': cities[i],
-            'label': cities[i]['city']
-          })
-        };
-        data_1= [];
         const { selectedOption } = this.state;
-
-        for (var key in selectedOption){
-            data_1.push(selectedOption[key]['value'])
-        };
-    
+        this.updateData();
 
         return( 
             <Wrapper 
@@ -265,14 +243,13 @@ class D3_1 extends Component {
                 ctTableFullWidth={this.props.ctTableFullWidth}
                 ctTableUpgrade={this.props.ctTableUpgrade}
                 size={this.props.size} >
-
-         
-        <svg id="svg1" height="300" width="700" ref={node => this.node = node} />
-        <Select
-        value={selectedOption}
-        isMulti
-        onChange={this.handleChange}
-        options={options} />   
+     
+                <svg id="svg1" height="300" width="700" ref={node => this.node = node} />
+                <Select
+                    value={selectedOption}
+                    isMulti
+                    onChange={this.handleChange}
+                    options={options} />   
             </Wrapper>
             
             

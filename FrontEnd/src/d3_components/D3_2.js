@@ -85,10 +85,7 @@ class D3_2 extends Component {
         // Reference/ D3/ ID/ React/ D3.select
 
 
-    createBarChart() {
-              
-        console.log(data_1);
-        
+    createBarChart() {        
 
         var t = d3.transition()
                     .duration(750);
