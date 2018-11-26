@@ -100,12 +100,14 @@ class LeafMap extends Component {
         if(getCities) {
             var cities = this.props.countriesJson[country]['cities'];
             var circles = [];
-            for(var i = 1; i <= Object.keys(cities).length; i++) {
+            var keys = Object.keys(cities);
+            for(var i = 0; i < keys.length; i++) {
+                var key = keys[i];
                 const latlng = [];
-                latlng.push(cities[i]['latitude']);
-                latlng.push(cities[i]['longitude']);
-                const hdi = Number(cities[i]['real_hdi'])
-                const text = "Name: " + cities[i]["city_name"] + "<br>" + "HDI: " + hdi; 
+                latlng.push(cities[key]['latitude']);
+                latlng.push(cities[key]['longitude']);
+                const hdi = Number(cities[key]['real_hdi'])
+                const text = "Name: " + cities[key]["city_name"] + "<br>" + "HDI: " + hdi; 
                 var color = "";
                 var opacity = 1;
                 if(hdi >= 0.75) {
@@ -201,7 +203,7 @@ class LeafMap extends Component {
         const targetCountries = this.props.targetCountries;
         const buttons = targetCountries.map((country) =>{
 
-            if(country === "Fly Back"){
+            if(country === "World"){
                 return  <Button key = { country} onClick={() => this.clickFly(country,originPosition,originZoom)}>{country}</Button>
             }
             var country_key = countryMapper[country];
