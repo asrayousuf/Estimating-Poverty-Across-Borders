@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Grid, Row, Col, ProgressBar } from "react-bootstrap";
-
+import Tabss from "components/Tabss/Tabss";
 import LeafMap from "components/Map/Map";
 
 import D3_1 from '../../d3_components/D3_1';
@@ -95,24 +95,26 @@ class Dashboard extends Component {
       targetCountries={targetCountries}
       selectedCountry={this.state.selectedCountry}
     />;
-
     return (
       <div>
         <div className="content">
+          <Tabss tabs={[2016,2017]} />
           <Grid fluid>
             <Row>
               <Col md={6}>
                 {this.state.first ? <div>
-                  <h1 class="text-center">Migration and HDI</h1>
-                  <p class="text-center lead"> At the end of 2016. <br />
+                  <h1 className="text-center">Migration and HDI</h1>
+                  <p className="text-center lead"> At the end of 2016. <br />
                     <br />
-                    The total number of refugees and asylum seekers in the world hit <span class="text-danger">25.9 </span> million people.<br />
+                    The total number of refugees and asylum seekers in the world hit <span className="text-danger">25.9 </span> million people.<br />
                     <br />
-                    There are more than <span class="text-danger">244 million</span>  international migrants, globally. <br />
+                    There are more than <span className="text-danger">244 million</span>  international migrants, globally. <br />
                     <br />
                     Migration depends on a lot of factors, from war and poverty to educational attainment. <br />
                     <br />
                     Now we've told the story, so let's look at the numbers. <br />
+                    <br />
+                    Please click on the right hand side buttons. 
                   </p>
                 </div> :
                   <div>

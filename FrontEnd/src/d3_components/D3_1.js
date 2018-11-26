@@ -21,6 +21,7 @@ for (var key in data){
 
 var chartG = null;
 var padding = {t: 10, r: 10, b: 10, l: 10};
+var countries_idx = [ "","brazil","colombia","costarica","pakistan","mexico","poland","nigeria"];
 
 class D3_1 extends Component {
   constructor(props){
@@ -32,21 +33,6 @@ class D3_1 extends Component {
         // - countriesJson
         // - citiesJson
         // - countries
-        var cities= []
-        for (var key in this.props.citiesJson[3]){
-          cities.push({
-            "city": this.props.citiesJson[3][key]['city_name'],
-            "real_hdi": this.props.citiesJson[3][key]['real_hdi'],
-            "predicted_hdi": this.props.citiesJson[3][key]['predicted_hdi']
-          });
-        };
-        // console.log(cities);
-        for (var i in cities){
-          options.push({
-            'value': cities[i],
-            'label': cities[i]['city']
-          })
-        };
     }
 
     state = {
@@ -56,7 +42,6 @@ class D3_1 extends Component {
     handleChange = (selectedOption) => {
       data_1= [];
       this.setState({ selectedOption });
-      console.log(`Option selected:`, selectedOption);
       for (var key in selectedOption){
         data_1.push(selectedOption[key]['value'])
       };
@@ -81,8 +66,7 @@ class D3_1 extends Component {
         // Reference/ D3/ ID/ React/ D3.select
 
 
-    createBarChart() {
-              
+    createBarChart() {              
         console.log(data_1);
         
 
@@ -211,7 +195,31 @@ class D3_1 extends Component {
     
 
     render() {
-      const { selectedOption } = this.state;
+        var cities= []
+        const idx = (countries_idx.indexOf(this.props.selectedCountry));
+
+        for (var key in this.props.citiesJson[idx]){
+          cities.push({
+            "city": this.props.citiesJson[idx][key]['city_name'],
+            "real_hdi": this.props.citiesJson[idx][key]['real_hdi'],
+            "predicted_hdi": this.props.citiesJson[idx][key]['predicted_hdi']
+          });
+        };
+        // console.log(cities);
+        for (var i in cities){
+          options.push({
+            'value': cities[i],
+            'label': cities[i]['city']
+          })
+        };
+        data_1= [];
+        const { selectedOption } = this.state;
+
+        for (var key in selectedOption){
+            data_1.push(selectedOption[key]['value'])
+        };
+    
+
         return( 
             <Wrapper 
                 title={this.props.title}

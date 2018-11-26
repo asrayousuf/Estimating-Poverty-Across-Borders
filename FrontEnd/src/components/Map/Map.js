@@ -168,7 +168,7 @@ class LeafMap extends Component {
     // latlng needs to be [lat,lng]
 
     clickFly(country, latlng, zoom){
-        var countryZoomer = {"Fly Back" : 2, "costarica" : 8, "brazil" : 5,
+        var countryZoomer = {"World" : 2, "costarica" : 8, "brazil" : 5,
         "nigeria" : 6, "poland" : 6, "pakistan" : 5, "mexico" : 5, "colombia" : 6};
         zoom = countryZoomer[country];
         if(zoom === null) {
@@ -180,7 +180,7 @@ class LeafMap extends Component {
         
         //Create Circles on City Data
         var circles;
-        if(country === "Fly Back") {
+        if(country === "World") {
             circles = this.makeCircles(country, false);
         } else {
             circles = this.makeCircles(country, true);
