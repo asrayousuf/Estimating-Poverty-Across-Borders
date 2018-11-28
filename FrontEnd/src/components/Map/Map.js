@@ -209,7 +209,7 @@ class LeafMap extends Component {
             var country_key = countryMapper[country];
             const latlng = [this.props.countriesJson[country_key]['latitude'], this.props.countriesJson[country_key]['longitude']];
             const zoom = 5;
-            return <Button key = { country_key} onClick={() => this.clickFly(country_key,latlng,zoom)}>{country}</Button>
+            return <Button key = { country_key} onClick={() => this.clickFly(country_key,latlng,zoom)} >{country}</Button>
         })
         
         const leftmap = (

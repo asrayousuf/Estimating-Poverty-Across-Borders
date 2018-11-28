@@ -106,10 +106,18 @@ class Dashboard extends Component {
       selectedCountry={this.state.selectedCountry}
     /> ;
 
+    var displayCountry = "";
+    for(var country in countryMapper){
+      if(this.state.selectedCountry.toUpperCase() == country.replace(/\s/g, '').toUpperCase()){
+        displayCountry = country;
+        break;
+      }
+    }
     return (
       <div>
         <div className="content">
           <Tabss tabs={[2016,2017]} />
+          <h1 className="text-center">{displayCountry}</h1>
           <Grid fluid>
             <Row>
               <Col md={6}>
@@ -141,7 +149,8 @@ class Dashboard extends Component {
                   citiesJson={this.state.citiesJson}
                   countries={this.state.countries}
                   targetCountries={targetCountries}
-                  handleButtonClick={this.handleButtonClick} />
+                  handleButtonClick={this.handleButtonClick} 
+                  />
               </Col>
             </Row>
           </Grid>
