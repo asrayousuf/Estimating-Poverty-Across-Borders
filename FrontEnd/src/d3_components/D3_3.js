@@ -21,7 +21,7 @@ for (var key in data){
 
 var chartG = null;
 var padding = {t: 10, r: 10, b: 10, l: 10};
-var arr= [];
+var countries_idx = [ "","brazil","colombia","costarica","pakistan","mexico","poland","nigeria"];
 
 class D3_3 extends Component {
 	constructor(props){
@@ -34,23 +34,6 @@ class D3_3 extends Component {
         // - citiesJson
         // - countries
         // - targetCountries
-        var cities= [];
-        for (var key in this.props.citiesJson[3]){
-          cities.push({
-            "city": this.props.citiesJson[3][key]['city_name'],
-            "government": this.props.citiesJson[3][key]['government'],
-            "pharmacy": this.props.citiesJson[3][key]['pharmacy'],
-            "bank": this.props.citiesJson[3][key]['bank'],
-            "secondary": this.props.citiesJson[3][key]['secondary']
-          });
-        };
-        // console.log(cities);
-        for (var i in cities){
-          options.push({
-            'value': cities[i],
-            'label': cities[i]['city']
-          })
-        };
    	}
 
     state = {
@@ -59,12 +42,11 @@ class D3_3 extends Component {
 
     handleChange = (selectedOption) => {
       data_1= [];
-      this.setState({ selectedOption });
-      console.log(`Option selected:`, selectedOption);
       for (var key in selectedOption){
         data_1.push(selectedOption[key]['value'])
       };
-      return 
+      this.setState({ selectedOption });
+      return ;
       }
 
     componentDidMount() {
@@ -75,6 +57,29 @@ class D3_3 extends Component {
     }
     componentDidUpdate() {
       this.createBarChart()
+    }
+
+    updateData(){
+        const idx = (countries_idx.indexOf(this.props.selectedCountry));
+        var cities= [];
+
+        for (var key in this.props.citiesJson[idx]){
+          cities.push({
+            "city": this.props.citiesJson[idx][key]['city_name'],
+            "government": this.props.citiesJson[idx][key]['government'],
+            "pharmacy": this.props.citiesJson[idx][key]['pharmacy'],
+            "bank": this.props.citiesJson[idx][key]['bank'],
+            "secondary": this.props.citiesJson[idx][key]['secondary']
+          });
+        };
+        options = [];
+        for (var i in cities){
+          options.push({
+            'value': cities[i],
+            'label': cities[i]['city']
+          })
+        };
+
     }
 
         // This may have problem
@@ -92,7 +97,9 @@ class D3_3 extends Component {
 
         
         var svg = d3.select("#svg3");
-        
+        svg.selectAll(".bar").remove();
+        svg.selectAll(".domain").remove();
+
         var svgWidth = +svg.attr('width');
         var svgHeight = +svg.attr('height');
 
@@ -108,21 +115,28 @@ class D3_3 extends Component {
         
 
         var y = d3.scaleLinear()
-            .rangeRound([chartHeight, 0])
-            .domain([0,1]);
+            .rangeRound([0, chartHeight])
+            .domain([0, 5000]);
+
+        var ax_y = d3.scaleLinear()
+            .rangeRound([0, chartHeight])
+            .domain([5000, 0]);
 
         var z = d3.scaleOrdinal()
-                .range(["#98abc5","#ff8c00"]);
+                .range(["#98abc5","#ff8c00", "#9999ff", "#FFC0CB"]);
 
-        var keys= ["bank", "secondary", "pharmacy", "government"]
+        var keys= ["Bank", "Secondary", "Pharmacy", "Government"]
 
+        var yAxis = d3.axisLeft(ax_y);
         // Make the y axis......
         chartG.append("g")
             .attr("class", "axis")
-            .attr("y", 10)
-            .call(d3.axisLeft(y).ticks(8))
+            //.attr("y", 10)
+            .attr("transform", "translate(40,0)")
+            .call(yAxis)
+            //.call(d3.axisLeft(y).ticks(8))
           
-          chartG.append("text")
+        chartG.append("text")
             .attr("x", 2)
             .attr("y", 10)
             .attr("dy", "0.32em")
@@ -179,25 +193,71 @@ class D3_3 extends Component {
 
         bars.merge(barsEnter)
             .attr('transform', function(d,i){
-                return 'translate('+[(i*6 * barBand + 20), (chartHeight- y(d.real_hdi))]+')';
+                var temp = [d.government, d.pharmacy, d.secondary, d.bank]
+                console.log(temp);
+                return 'translate('+[(i*6 * barBand + 40), (chartHeight- y(Math.max(...temp)))] + ')';
             });
 
         barsEnter.append('rect')
-            .transition(t)
-            
-            .attr('y', function(d){
-                chartHeight - y(d.real_hdi)
-            })
-            .attr('width', barHeight+30)
-            .attr('height', function(d){
-                return y(d.real_hdi)
-            })
-            .style("fill", z )
-            ;
+                .transition(t)
+                .attr('x', barHeight+16)
+                .attr('y', function(d) {
+                   var temp = [d.government, d.pharmacy, d.secondary, d.bank]
+                   return (y(Math.max(...temp)) - y(d.government));  
+                })
+                .attr('width', barHeight+10)
+                .attr('height', function(d){
+                    return y(d.government)
+                })
+                .style("fill", z );
+
+        barsEnter.append('rect')
+                .transition(t)                
+                .attr('x', barHeight+32)
+                .attr('y', function(d){
+                    var temp = [d.government, d.pharmacy, d.secondary, d.bank]
+                    return (y(Math.max(...temp)) - y(d.pharmacy));
+                })
+                .attr('width', barHeight+10)
+                .attr('height', function(d){
+                    return y(d.pharmacy)
+                })
+                .style("fill", z(1) );
+
+        barsEnter.append('rect')
+                .transition(t)                
+                .attr('x', barHeight+48)
+                .attr('y', function(d){
+                    var temp = [d.government, d.pharmacy, d.secondary, d.bank]
+                    return (y(Math.max(...temp)) - y(d.secondary));
+                })
+                .attr('width', barHeight+10)
+                .attr('height', function(d){
+                    return y(d.secondary)
+                })
+                .style("fill", z(2) );
+
+        barsEnter.append('rect')
+                .transition(t)                
+                .attr('x', barHeight+64)
+                .attr('y', function(d){
+                    var temp = [d.government, d.pharmacy, d.secondary, d.bank]
+                    return (y(Math.max(...temp)) - y(d.bank));
+                })
+                .attr('width', barHeight+10)
+                .attr('height', function(d){
+                    return y(d.bank)
+                })
+                .style("fill", z(3) );
 
         barsEnter.append('text')
-            .attr('x', 0)
-            .attr('y', -10)
+            .attr('x', barHeight + 20)
+            .attr('y', function(d){
+                var temp = [d.government, d.pharmacy, d.secondary, d.bank]
+                return 20;
+            })
+            .attr("transform", "rotate(-45)")
+            .attr('font-size', '9')
             .text(function(d){
                 return d.city;
             });
@@ -208,7 +268,8 @@ class D3_3 extends Component {
 
     render() {
       const { selectedOption } = this.state;
-        return( 
+      this.updateData();
+      return( 
             <Wrapper 
                 title={this.props.title}
                 hCenter={this.props.hCenter}
