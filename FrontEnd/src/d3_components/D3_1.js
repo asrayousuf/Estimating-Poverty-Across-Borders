@@ -121,10 +121,18 @@ class D3_1 extends Component {
         var keys= ["real_hdi", "predicted_hdi"]
 
         // Make the y axis......
+        var yScale = d3.scaleLinear()
+             .domain([0, 1])
+             .range([chartHeight - 10, 10]);
+        
+        var yAxis = d3.axisLeft(yScale); 
+
         chartG.append("g")
             .attr("class", "axis")
-            .attr("y", 10)
-            .call(d3.axisLeft(y).ticks(8))
+            .attr("transform", "translate(20,0)")
+            //.attr("y", 30)
+            .call(yAxis)
+            //.call(d3.axisLeft(y).ticks(8))
           
           chartG.append("text")
             .attr("x", 2)
@@ -142,7 +150,7 @@ class D3_1 extends Component {
           .selectAll("g")
           .data(keys.slice().reverse())
           .enter().append("g")
-            .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+            .attr("transform", function(d, i) { return "translate(10," + i * 20 + ")"; });
 
         legend.append("rect")
             .attr("x", chartWidth - 40)
@@ -183,7 +191,7 @@ class D3_1 extends Component {
 
         bars.merge(barsEnter)
             .attr('transform', function(d,i){
-                return 'translate('+[(i*6 * barBand + 20), (chartHeight- y(d.real_hdi))]+')';
+                return 'translate('+[(i*6 * barBand + 40), (chartHeight- y(d.real_hdi))]+')';
             });
 
 
@@ -209,7 +217,7 @@ class D3_1 extends Component {
 
 
         barsEnter.append('text')
-            .attr('x', 0)
+            .attr('x', barHeight+15)
             .attr('y', function(d){
                 if (d.real_hdi < d.predicted_hdi){
                     console.log("in Here");
@@ -220,6 +228,7 @@ class D3_1 extends Component {
                     return -10
                 }
             })
+            .attr("transform", "rotate(-45)")
             .text(function(d){
                 return d.city;
             });
