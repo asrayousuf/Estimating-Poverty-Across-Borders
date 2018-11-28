@@ -122,18 +122,25 @@ class Dashboard extends Component {
             <Row>
               <Col md={6}>
                 {this.state.first ? <div>
-                  <h1 className="text-center">Migration and HDI</h1>
-                  <p className="text-center lead"> At the end of 2016. <br />
+                 
+                  <p className="text-center lead">
+Nearly half of the world's population — more than <span className="text-danger"> 3 billion </span>people — live on less than <span className="text-danger">$2.50 </span> a day. According to UNICEF, <span className="text-danger"> 22,000 children </span> die each day due to poverty. 
+<br /><br />
+<span className="text-danger">805 million </span> people worldwide do not have enough food to eat.<br />
+<br />
+                    Accurate data can help us to alleviate poverty! <br />
                     <br />
-                    The total number of refugees and asylum seekers in the world hit <span className="text-danger">25.9 </span> million people.<br />
+                    Accurate and timely estimates of population demographics are vital in order to understand social and economics inequalities. Such data shape decisions about which policies are implemented as well as where governments and humanitarian organizations choose to allocate scarce resources.<br />
                     <br />
-                    There are more than <span className="text-danger">244 million</span>  international migrants, globally. <br />
+                    Research by UNICEF indicates that anonymized and aggregated social media data from Twitter can be used to predict the Human Development Index (HDI). Ultimately, this can help us achieve the goal of bridging the gap between years where sub-national surveys are unavailable. <br />
                     <br />
-                    Migration depends on a lot of factors, from war and poverty to educational attainment. <br />
+
+                    This opportunity could allow us to look at the temporal evolution of socio-economic estimates, and to operationalize such models, enabling policy-makers and humanitarian organizations to base their decisions on up-to-date data. 
+                    <br /><br />
+
+                   Let's have a look at how it can be done!<br />
                     <br />
-                    Now we've told the story, so let's look at the numbers. <br />
-                    <br />
-                    Please click on the right hand side buttons. 
+                    Please select the country you wish to explore .....
                   </p>
                 </div> :
                 <div>
