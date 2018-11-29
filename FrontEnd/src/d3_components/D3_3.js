@@ -301,7 +301,7 @@ class D3_3 extends Component {
                 value={selectedOption}
                 isMulti
                 onChange={this.handleChange}
-                options={dummyOption} />
+                options={options} />
             </Wrapper>
             
             
