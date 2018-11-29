@@ -121,11 +121,11 @@ class D3_3 extends Component {
 
         var y = d3.scaleLinear()
             .rangeRound([0, chartHeight])
-            .domain([0, 5000]);
+            .domain([0, 300]);
 
         var ax_y = d3.scaleLinear()
             .rangeRound([0, chartHeight])
-            .domain([5000, 0]);
+            .domain([300, 0]);
 
         var z = d3.scaleOrdinal()
                 .range(["#98abc5","#ff8c00", "#9999ff", "#FFC0CB"]);

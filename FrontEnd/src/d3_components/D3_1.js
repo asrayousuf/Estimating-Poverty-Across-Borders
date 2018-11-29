@@ -118,7 +118,7 @@ class D3_1 extends Component {
         var z = d3.scaleOrdinal()
                 .range(["#98abc5","#ff8c00"]);
 
-        var keys= ["real_hdi", "predicted_hdi"]
+        var keys= ["Real HDI", "Predicted HDI"]
 
         // Make the y axis......
         var yScale = d3.scaleLinear()
