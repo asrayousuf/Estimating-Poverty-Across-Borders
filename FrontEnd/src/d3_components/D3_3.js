@@ -38,6 +38,7 @@ class D3_3 extends Component {
 
     state = {
       selectedOption: null,
+      dummySelectedOption: [],
     }
 
     handleChange = (selectedOption) => {
@@ -47,7 +48,11 @@ class D3_3 extends Component {
       };
       this.setState({ selectedOption });
       return ;
-      }
+    }
+
+    handleDummyChange = (dummySelectedOption) =>{
+        this.setState({dummySelectedOption});
+    }
 
     componentDidMount() {
         var svg = d3.select("#svg3");
@@ -267,7 +272,11 @@ class D3_3 extends Component {
      };
 
     render() {
-      const { selectedOption } = this.state;
+      const { selectedOption, dummySelectedOption } = this.state;
+      const dummyOptions = ['Infrastructure', 'Migration', 'Popularity', 'Activity'];
+      const dummyOption = dummyOptions.map((op)=>{
+          return {value: op, label: op};
+      });
       this.updateData();
       return( 
             <Wrapper 
@@ -277,14 +286,20 @@ class D3_3 extends Component {
                 ctTableFullWidth={this.props.ctTableFullWidth}
                 ctTableUpgrade={this.props.ctTableUpgrade}
                 size={this.props.size} >
-        <svg id="svg3" height="300" width="700" ref={node => this.node = node} />
-        
-
             <Select
-        value={selectedOption}
-        isMulti
-        onChange={this.handleChange}
-        options={options} />
+                placeholder={"Select Development Index"}
+                value={dummySelectedOption}
+                isMulti
+                onChange={this.handleDummyChange}
+                options={dummyOption} />
+
+            <svg id="svg3" height="300" width="700" ref={node => this.node = node} />
+            <Select
+                placeholder={"Select City"}
+                value={selectedOption}
+                isMulti
+                onChange={this.handleChange}
+                options={dummyOption} />
             </Wrapper>
             
             

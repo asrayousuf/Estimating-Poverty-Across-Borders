@@ -65,9 +65,8 @@ class Header extends Component {
       <Navbar fluid>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="#"><img style={styles} src={logo} />Estimating Poverty Across Borders</a>
+            <a href="#"><img style={styles} src={logo} /><h className="text-center">Estimating Poverty Across Borders</h></a>
           </Navbar.Brand>
-          <Navbar.Toggle onClick={this.mobileSidebarToggle} />
         </Navbar.Header>
       </Navbar>
     );

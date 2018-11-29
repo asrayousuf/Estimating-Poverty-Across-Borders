@@ -145,7 +145,6 @@ Nearly half of the world's population — more than <span className="text-danger
                 </div> :
                 <div>
                   {d3_1}
-                  {d3_2}
                   {d3_3}
                 </div>
                 }
