@@ -81,7 +81,7 @@ class Dashboard extends Component {
       return <ProgressBar now={100} />;
     }
     let d3_1 = <D3_1
-      title="HDI"
+      title="Human Development Index"
       countriesJson={this.state.countriesJson}
       citiesJson={this.state.citiesJson}
       countries={this.state.countries}
@@ -124,8 +124,10 @@ class Dashboard extends Component {
                 {this.state.first ? <div>
                  
                   <p className="text-center lead">
-Nearly half of the world's population — more than <span className="text-danger"> 3 billion </span>people — live on less than <span className="text-danger">$2.50 </span> a day. According to UNICEF, <span className="text-danger"> 22,000 children </span> die each day due to poverty. 
-<br /><br />
+Nearly half of the world's population — more than <span className="text-danger"> 3 billion </span>people — live on less than <span className="text-danger">$2.50 </span> a day.<br />
+                    <br />
+                     According to UNICEF, <span className="text-danger"> 22,000 children </span> die each day due to poverty. 
+                    <br /><br />
 <span className="text-danger">805 million </span> people worldwide do not have enough food to eat.<br />
 <br />
                     Accurate data can help us to alleviate poverty! <br />
