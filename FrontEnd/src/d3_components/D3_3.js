@@ -130,7 +130,7 @@ class D3_3 extends Component {
         var z = d3.scaleOrdinal()
                 .range(["#98abc5","#ff8c00", "#9999ff", "#FFC0CB"]);
 
-        var keys= ["Bank", "Secondary", "Pharmacy", "Government"]
+        var keys= ["Bank", "Schools", "Pharmacy", "Government"]
 
         var yAxis = d3.axisLeft(ax_y);
         // Make the y axis......
@@ -147,7 +147,9 @@ class D3_3 extends Component {
             .attr("dy", "0.32em")
             .attr("fill", "#000")
             .attr("font-weight", "bold")
-            .attr("text-anchor", "start");
+            .attr("text-anchor", "start")
+            .attr("transform", "rotate(90) translate(100, -7)")
+            .text("Count");
 
         // Makes the legends......
         var legend = chartG.append("g")
