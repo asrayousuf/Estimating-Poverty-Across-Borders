@@ -69,8 +69,5 @@ npm rebuild node-sass
 
 to fix the problem when you deploy web app on AWS EC2. 
 
-## Known Issue
-Due to the resolution of different screens, the placement of legend may be different from one computer to another. We spent some time to fix it but did not cover all kinds of screen resolution. This issue is not really relevant to the goal of the course so we may just leave it. 
-
 # Reference
 [Light Bootstrap Dashboard React](http://lbd-react.creative-tim.com/)
