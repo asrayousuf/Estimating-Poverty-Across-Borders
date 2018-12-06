@@ -49,6 +49,14 @@ npm run
 
 Then you should be able to reach `http://localhost:3000/` in your browser.
 
+#Backend
+The data API can be hosted locally using the commands in *python-api* folder:
+```
+source vv/bin/activate
+python api.py
+```
+The above commands are only required if any changes need to be made to the backend. However, the API is hosted for data consumption on Heroku at https://shrouded-lake-82256.herokuapp.com/get_data
+
 ## Trouble Shooting
 If you encounter some errors like
 ```
