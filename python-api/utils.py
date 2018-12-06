@@ -352,8 +352,8 @@ class DataReader:
 ###merge geodata###
 cr = pd.read_csv("../data/costarica_geo.csv", index_col = None)
 cr['Country'] = "costarica"
-mexico = pd.read_csv("../data/mexico_geo.csv", index_col = None)
-mexico['Country'] = "mexico"
+#mexico = pd.read_csv("../data/mexico_geo.csv", index_col = None)
+#mexico['Country'] = "mexico"
 nepal = pd.read_csv("../data/nepal_geo.csv", index_col = None)
 nepal['Country'] = "nepal"
 nigeria = pd.read_csv("../data/nigeria_geo.csv", index_col = None)
@@ -364,13 +364,48 @@ poland = pd.read_csv("../data/poland_geo.csv", index_col = None)
 poland['Country'] = "poland"
 colombia = pd.read_csv("../data/columbia_geo.csv", index_col = None)
 colombia['Country'] = "colombia"
-brazil = pd.read_csv("../data/brazil_geo.csv", index_col = None)
+brazil = pd.read_csv("../data/brazil_final.csv", index_col = None)
 brazil['Country'] = "brazil"
-frames = [cr, mexico, nepal, nigeria, pakistan, poland, colombia, brazil]
+frames = [cr, nepal, nigeria, pakistan, poland, colombia, brazil]
 geo_frame = pd.concat(frames)
 country_frame = pd.read_csv("../data/country.csv", index_col = None)
+print("CF Before Merge: ", len(country_frame))
 final_frame = pd.merge(country_frame, geo_frame, how='left', left_on=['Country', 'codmun'], right_on=['Country', 'codmun'])
-final_frame.fillna(-1, inplace=True)
-final_frame.to_csv("../data/country_new.csv", index=False)
+#final_frame.fillna(-1, inplace=True)
+#final_frame.dropna(inplace=True) 
+kek = final_frame[["bank", "commercial", "embassy", "government", "hospital", "industrial",
+"park", "paved", "pharmacy", "police", "primary", "school", "secondary", "supermarket",
+"tower", "unpaved"]].isna().sum(axis=1)
+count = 0
+hdi_l = [] #<= 0.5
+hdi_m = [] # > 0.5 && <=0.7
+hdi_h = [] # > 0.7
+l_count = 0
+m_count = 0
+h_count = 0
+for i in range(len(kek)):
+	hdi = final_frame.iloc[i]['hdi']
+	if hdi <= 0.5:
+		l_count += 1
+	elif hdi > 0.5 and hdi <= 0.7:
+		m_count += 1
+	else: 
+		h_count += 1	
+	if kek[i] == 16:
+		hdi = final_frame.iloc[i]['hdi']
+		if hdi <= 0.5:
+			hdi_l.append(hdi)
+		elif hdi > 0.5 and hdi <= 0.7:
+			hdi_m.append(hdi)
+		else: 
+			hdi_h.append(hdi)
+		
+print("Low: ", len(hdi_l)/l_count, np.sum(hdi_l)/len(hdi_l))
+print("Med: ", len(hdi_m)/m_count, np.sum(hdi_m)/len(hdi_m))
+print("High: ", len(hdi_h)/h_count, np.sum(hdi_h)/len(hdi_h))
+
+final_frame.drop_duplicates(inplace=True)
+print("CF After Merge: ", len(final_frame))
+#final_frame.to_csv("../data/country_new.csv", index=False)
 #now we join by country and codmun
 """

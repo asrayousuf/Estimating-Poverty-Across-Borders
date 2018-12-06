@@ -127,14 +127,24 @@ class Regressor:
 		X_cols.remove('hdi_estimated_2016')
 		X_cols.remove('hdi_estimated_2017')
 
-		####2017####
-		X_cols.remove('activity_2016_h0-5')
-		X_cols.remove('activity_2016_h6-11')
-		X_cols.remove('activity_2016_h12-17')
-		X_cols.remove('activity_2016_h18-23')
+		####2016####
+		#X_cols.remove('activity_2017_h0-5')
+		#X_cols.remove('activity_2017_h6-11')
+		#X_cols.remove('activity_2017_h12-17')
+		#X_cols.remove('activity_2017_h18-23')
 
-		X_cols.remove('average_inflow_2016')
-		X_cols.remove('average_outflow_2016')
+		#X_cols.remove('average_inflow_2017')
+		#X_cols.remove('average_outflow_2017')
+
+		####2017####
+		#X_cols.remove('activity_2016_h0-5')
+		#X_cols.remove('activity_2016_h6-11')
+		#X_cols.remove('activity_2016_h12-17')
+		#X_cols.remove('activity_2016_h18-23')
+
+		#X_cols.remove('average_inflow_2016')
+		#X_cols.remove('average_outflow_2016')
+
 		X = df[X_cols]
 
 		return self.model.predict(X)
@@ -172,14 +182,20 @@ class Regressor:
 		X_cols.remove('hdi_estimated_2017')
 
 		###2016 Predictions####
-		X_cols.remove('activity_2016_h0-5')
-		X_cols.remove('activity_2016_h6-11')
-		X_cols.remove('activity_2016_h12-17')
-		X_cols.remove('activity_2016_h18-23')
-		X_cols.remove('average_inflow_2016')
-		X_cols.remove('average_outflow_2016')
+		#X_cols.remove('activity_2016_h0-5')
+		#X_cols.remove('activity_2016_h6-11')
+		#X_cols.remove('activity_2016_h12-17')
+		#X_cols.remove('activity_2016_h18-23')
+		#X_cols.remove('average_inflow_2016')
+		#X_cols.remove('average_outflow_2016')
 
 		###2017 Predictions####
+		#X_cols.remove('activity_2017_h0-5')
+		#X_cols.remove('activity_2017_h6-11')
+		#X_cols.remove('activity_2017_h12-17')
+		#X_cols.remove('activity_2017_h18-23')
+		#X_cols.remove('average_inflow_2017')
+		#X_cols.remove('average_outflow_2017')
 		
 		X = df[X_cols]
 		X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=True, random_state=42)
@@ -193,7 +209,7 @@ class Regressor:
 #testing_mse = []
 #mod = RandomForestRegressor(bootstrap=True, criterion='mae', n_estimators=100)
 #mod = RandomForestRegressor()
-#r = Regressor("Random Forest", load_model=True)
+#r = Regressor("Random Forest", load_model=False)
 #importances = r.model.feature_importances_
 #reader = DataReader()
 #df = reader.create_input_data()
@@ -201,10 +217,13 @@ class Regressor:
 #df,a,b,c = r.split_data(df)
 #cols = df.columns
 #predictions = r.predict(df)
-#cv, ma, mse = r.train(mod, save=True, make_chart=False)
+#cv, ma, mse = r.train(mod, save=False, make_chart=False)
 #cv_error.append(cv)
 #testing_ma_error.append(ma)
 #testing_mse.append(mse)
+#print(cv_error)
+#print(testing_ma_error)
+#print(testing_mse)
 #print(predictions)
 #output_df = pd.DataFrame(columns=['codmun', 'country', 'HDI_2016'])
 #output_df['codmun'] = df['codmun']
@@ -254,23 +273,26 @@ cv, ma, mse = r.train()
 cv_error.append(cv)
 testing_ma_error.append(ma)
 testing_mse.append(mse)
-
+"""
 ###Create a chart###
 fig, ax = plt.subplots()
 idx = np.arange(1, 6)
-
-a, b, c, d, e = plt.bar(idx, np.abs(cv_error))
+mse_fam = [0.019078001287188905, 0.019256912600907165, 0.020155023469181438,
+0.020715330582168442, 0.028051791020443233]
+a, b, c, d, e = plt.bar(idx, mse_fam)
 a.set_facecolor('r')
 b.set_facecolor('g')
 c.set_facecolor('b')
 d.set_facecolor('k')
 e.set_facecolor('c')
 ax.set_xticks(idx)
-ax.set_xticklabels(["Random Forest", "KNN", "Linear Regression", "SVM", "Bayesian Ridge"])
-ax.set_ylabel('Mean 8-Fold Cross Validation Error')
-ax.set_title('Cross-Validation Error by Regressor')
+ax.set_xticklabels(["All Features", "No Twitter", "No Migration", "No Twitter, Migration", "No OSM Data"], rotation=90)
+ax.set_ylabel('Mean Squared Error')
+ax.set_title('Input Features and Error')
+plt.tight_layout()
 fig.savefig("cv_error")
 
+"""
 fig, ax = plt.subplots()
 a, b, c, d, e = plt.bar(idx, testing_ma_error)
 a.set_facecolor('r')
