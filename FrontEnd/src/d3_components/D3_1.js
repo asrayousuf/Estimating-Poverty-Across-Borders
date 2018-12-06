@@ -153,13 +153,13 @@ class D3_1 extends Component {
             .attr("transform", function(d, i) { return "translate(10," + i * 20 + ")"; });
 
         legend.append("rect")
-            .attr("x", chartWidth - 40)
+            .attr("x", chartWidth - 90)
             .attr("width", 19)
             .attr("height", 19)
             .attr("fill", z);
 
         legend.append("text")
-            .attr("x", chartWidth - 45)
+            .attr("x", chartWidth - 95)
             .attr("y", 9.5)
             .attr("dy", "0.32em")
             .text(function(d) { return d; });
