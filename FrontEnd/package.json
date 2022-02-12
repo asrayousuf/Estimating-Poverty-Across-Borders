@@ -6,7 +6,7 @@
     "@types/googlemaps": "3.30.16",
     "@types/markerclustererplus": "2.1.29",
     "@types/react": "16.0.0",
-    "ajv": "6.0.0",
+    "ajv": "6.12.3",
     "bootstrap": "3.3.7",
     "chartist": "0.10.1",
     "d3": "5.7.0",
